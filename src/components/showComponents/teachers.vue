@@ -1,0 +1,15 @@
+<template>
+  <div>
+    <h2> 指导老师信息 </h2>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "teachers"
+    }
+</script>
+
+<style scoped>
+
+</style>
