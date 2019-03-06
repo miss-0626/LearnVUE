@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <h2> 指导老师信息 </h2>
-  </div>
+    <p>规章制度</p>
 </template>
 
 <script>
     export default {
-        name: "show-teacher"
+        name: "teachrule"
     }
 </script>
 
