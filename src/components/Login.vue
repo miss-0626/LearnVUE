@@ -1,9 +1,10 @@
 <template>
-  <!--<div class="login">-->
+  <div class="login">
   <el-row :span="24" class="login">
+    <div style=";margin:120px 400px 0px 400px;border:2px solid #3299cc;border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
     <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="100px">
       <el-row type="flex" justify="center">
-        <el-col :span="3">
+        <el-col :span="10">
           <el-form-item label-width="70px">
             <span><font color="#1e90ff" size="4">用户登录</font></span>
           </el-form-item>
@@ -11,7 +12,7 @@
       </el-row>
 
       <el-row type="flex" justify="center">
-        <el-col :span="5">
+        <el-col :span="12">
       <el-form-item label="用户名" prop="name">
         <el-input v-model="user.name" placeholder="请输入用户名"></el-input>
       </el-form-item>
@@ -19,7 +20,7 @@
       </el-row>
 
       <el-row type="flex" justify="center">
-        <el-col :span="5">
+        <el-col :span="12">
       <el-form-item label="密码" placeholder="请输入密码" prop="pass">
         <el-input v-model="user.pass" type="password" ></el-input>
       </el-form-item>
@@ -27,22 +28,23 @@
       </el-row>
 
       <el-row type="flex" justify="center">
-      <el-radio-group v-model="user.role"  prop="role">
+      <el-radio-group :span="12" v-model="user.role"  prop="role">
         <el-radio :label="1">教师</el-radio>
         <el-radio :label="2" >学生</el-radio>
         <el-radio :label="3">管理员</el-radio>
       </el-radio-group>
       </el-row>
       <el-row type="flex" justify="center">
-        <el-col :span="5">
+        <el-col :span="8">
       <el-form-item>
         <el-button type="primary" icon="el-icon-upload" @click="login">登录</el-button>
       </el-form-item>
         </el-col>
       </el-row>
     </el-form>
+    </div>
   </el-row>
-  <!--</div>-->
+  </div>
 </template>
 
 <<script>
@@ -66,7 +68,7 @@
             {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
           role: [
-            {required: true, message: '请选择角色', trigger: 'blur'}
+            {required: true, message: '请选择角色', trigger: 'blur',type:'number'}
           ]
         },
 
@@ -110,7 +112,7 @@
 .login {
     width: 100%;
     padding-bottom: 31%;
-    //height: 100%;
+    height: 100%;
     background: url('../assets/login.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #0C1424;

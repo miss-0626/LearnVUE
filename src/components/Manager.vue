@@ -1,40 +1,42 @@
 <template>
   <div class="Manager">
   <show></show>
-  <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-    <el-menu-item index="1">首页</el-menu-item>
-    <el-submenu index="2">
-      <template slot="title">实验室管理</template>
-      <el-menu-item index="2-1">基本信息</el-menu-item>
-      <el-menu-item index="2-2">设备</el-menu-item>
-      <el-menu-item index="2-3">状态</el-menu-item>
-    </el-submenu>
-    <el-submenu index="3">
-      <template slot="title">设备管理</template>
-      <el-menu-item index="3-1">基本信息</el-menu-item>
-      <el-menu-item index="3-2">所属实验室及编号</el-menu-item>
-      <el-menu-item index="3-3">状态</el-menu-item>
-      <el-menu-item index="3-4">维修处理</el-menu-item>
-    </el-submenu>
-    <el-submenu index="4">
-      <template slot="title">教学资源管理</template>
-      <el-menu-item index="4-1">教学课程</el-menu-item>
-      <el-menu-item index="4-2">科研项目</el-menu-item>
-      <el-menu-item index="4-3">指导老师</el-menu-item>
-      <el-submenu index="4-4">
-        <template slot="title">相关资料</template>
-        <el-menu-item index="4-4-1">实验指导书</el-menu-item>
-        <el-menu-item index="4-4-2">实验室规章制度</el-menu-item>
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
+      <el-menu-item index="Home">首页</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">实验室介绍</template>
+        <el-menu-item index="labshow">基本信息</el-menu-item>
+        <el-menu-item index="deal-labstate">状态</el-menu-item>
       </el-submenu>
-    </el-submenu>
-    <el-submenu index="5">
-      <template slot="title">信息查询与维护</template>
-      <el-menu-item index="5-1">个人信息</el-menu-item>
-      <el-menu-item index="5-2">成绩上传</el-menu-item>
-      <el-menu-item index="5-3">发布项目</el-menu-item>
-      <el-menu-item index="5-4">批改实验报告</el-menu-item>
-    </el-submenu>
-  </el-menu>
+      <el-submenu index="3">
+        <template slot="title">设备介绍</template>
+        <el-menu-item index="queshow">基本信息</el-menu-item>
+        <el-menu-item index="quenumber">所属实验室及编号</el-menu-item>
+        <el-menu-item index="questate">状态</el-menu-item>
+        <el-menu-item index="queservice">维修申报</el-menu-item>
+      </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">教学资源</template>
+        <el-menu-item index="teachcourse">教学课程</el-menu-item>
+        <el-menu-item index="teachproject">科研项目</el-menu-item>
+        <el-menu-item index="teachers">指导老师</el-menu-item>
+        <el-submenu index="4-4">
+          <template slot="title">相关资料</template>
+          <el-menu-item index="teachbook">实验指导书</el-menu-item>
+          <el-menu-item index="teachrule">实验室规章制度</el-menu-item>
+        </el-submenu>
+      </el-submenu>
+      <el-submenu index="5">
+        <template slot="title">信息查询与维护</template>
+        <el-menu-item index="pmessage">个人信息</el-menu-item>
+        <el-menu-item index="pscore">成绩查询</el-menu-item>
+        <el-menu-item index="pproject">项目申报情况</el-menu-item>
+        <el-menu-item index="preport">实验报告</el-menu-item>
+      </el-submenu>
+    </el-menu>
+
+    <router-view/>
+
   </div>
 </template>
 

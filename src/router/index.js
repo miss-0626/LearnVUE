@@ -21,6 +21,7 @@ import pmessage from '../components/showComponents/pmessage'
 import pscore from '../components/showComponents/pscore'
 import pproject from '../components/showComponents/pproject'
 import preport from '../components/showComponents/preport'
+import deallabstate from '../components/showComponents/deal-labstate'
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/Login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/show',
+      name: 'show',
+      component: show
     },
     {
       path: '/Student',
@@ -126,17 +132,178 @@ export default new Router({
     {
       path: '/Teacher',
       name: 'Teacher',
-      component: Teacher
+      component: Teacher,
+      children:[
+        {
+          path: '/Home',
+          name: 'Home',
+          component: Home
+        },
+        {
+          path:'/labshow',
+          name:'labshow',
+          component:labshow
+        },
+        {
+          path:'/labstate',
+          name:'labstate',
+          component:labstate
+        },
+        {
+          path:'/queshow',
+          name:'queshow',
+          component:queshow
+        },
+        {
+          path:'/quenumber',
+          name:'quenumber',
+          component:quenumber
+        },
+        {
+          path:'/questate',
+          name:'questate',
+          component:questate
+        },
+        {
+          path:'/queservice',
+          name:'queservice',
+          component:queservice
+        },
+        {
+          path:'/teachcourse',
+          name:'teachcourse',
+          component:teachcourse
+        },
+        {
+          path:'/teachproject',
+          name:'teachproject',
+          component:teachproject
+        },
+        {
+          path:'/teachbook',
+          name:'teachbook',
+          component:teachbook
+        },
+        {
+          path:'/teachrule',
+          name:'teachrule',
+          component:teachrule
+        },
+        {
+          path:'/teachers',
+          name:'teachers',
+          component:teachers
+        },
+        {
+          path:'/pmessage',
+          name:'pmessage',
+          component:pmessage
+        },
+        {
+          path:'/pscore',
+          name:'pscore',
+          component:pscore
+        },
+        {
+          path:'/pproject',
+          name:'pproject',
+          component:pproject
+        },
+        {
+          path:'/preport',
+          name:'preport',
+          component:preport
+        }
+      ]
     },
+
+
     {
       path: '/Manager',
       name: 'Manager',
-      component: Manager
-    },
-    {
-      path: '/show',
-      name: 'show',
-      component: show
+      component: Manager,
+      children:[
+        {
+          path: '/Home',
+          name: 'Home',
+          component: Home
+        },
+        {
+          path:'/labshow',
+          name:'labshow',
+          component:labshow
+        },
+        {
+          path:'/deal-labstate',
+          name:'deal-labstate',
+          component:deallabstate
+        },
+        {
+          path:'/queshow',
+          name:'queshow',
+          component:queshow
+        },
+        {
+          path:'/quenumber',
+          name:'quenumber',
+          component:quenumber
+        },
+        {
+          path:'/questate',
+          name:'questate',
+          component:questate
+        },
+        {
+          path:'/queservice',
+          name:'queservice',
+          component:queservice
+        },
+        {
+          path:'/teachcourse',
+          name:'teachcourse',
+          component:teachcourse
+        },
+        {
+          path:'/teachproject',
+          name:'teachproject',
+          component:teachproject
+        },
+        {
+          path:'/teachbook',
+          name:'teachbook',
+          component:teachbook
+        },
+        {
+          path:'/teachrule',
+          name:'teachrule',
+          component:teachrule
+        },
+        {
+          path:'/teachers',
+          name:'teachers',
+          component:teachers
+        },
+        {
+          path:'/pmessage',
+          name:'pmessage',
+          component:pmessage
+        },
+        {
+          path:'/pscore',
+          name:'pscore',
+          component:pscore
+        },
+        {
+          path:'/pproject',
+          name:'pproject',
+          component:pproject
+        },
+        {
+          path:'/preport',
+          name:'preport',
+          component:preport
+        }
+      ]
     }
   ]
 })

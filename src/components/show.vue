@@ -18,12 +18,6 @@
         <span style="margin-right: 15px">游客</span>
       </el-row>
     </el-header>
-
-<!--    <el-main>
-      <img src="../assets/logo.png">
-      <router-view/>
-    </el-main>-->
-
   </el-container>
 </template>
 

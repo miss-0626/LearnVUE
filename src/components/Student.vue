@@ -35,7 +35,7 @@
     </el-submenu>
   </el-menu>
 
-    <router-view/>    <!-- 最重要的标签，用来显示跳转的页面 -->
+    <router-view/>
 
 <!--    <el-row>
       <el-col :span="16" :offset="4">
@@ -56,12 +56,11 @@
 <script>
 /*  import  from './'*/
   import show from './show.vue'
-/*  import Home from './Home.vue'*/
 
     export default {
         name: "Student",
       components:{
-        show
+          show
       },
       data() {
         return {
