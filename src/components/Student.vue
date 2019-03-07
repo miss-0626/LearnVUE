@@ -2,7 +2,7 @@
   <div class="Student">
     <show></show>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
-    <el-menu-item index="Home">首页</el-menu-item>
+    <el-menu-item index="StudentHome">首页</el-menu-item>
     <el-submenu index="2">
       <template slot="title">实验室介绍</template>
       <el-menu-item index="labshow">基本信息</el-menu-item>
@@ -64,7 +64,7 @@
       },
       data() {
         return {
-          activeIndex: 'Home',
+          activeIndex: 'StudentHome',
           Home: '1'
         };
       },

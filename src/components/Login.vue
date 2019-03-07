@@ -85,9 +85,9 @@
                 duration: 3500
               })
               /*this.$router.push({path: 'show'})*/
-              if(this.user.role===1){   this.$router.push({path: 'Teacher'})  }
-              else if(this.user.role===2){  this.$router.push({path: 'Home'})  }
-              else{  this.$router.push({path: 'Manager'})  }
+              if(this.user.role===1){   this.$router.push({path: 'TeacherHome'})  }
+              else if(this.user.role===2){  this.$router.push({path: 'StudentHome'})  }
+              else{  this.$router.push({path: 'ManagerHome'})  }
             }
             else {
               this.$message({

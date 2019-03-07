@@ -21,10 +21,13 @@ import pmessage from '../components/showComponents/pmessage'
 import pscore from '../components/showComponents/pscore'
 import pproject from '../components/showComponents/pproject'
 import preport from '../components/showComponents/preport'
+import addteachproject from '../components/showComponents/add-teachproject'
+import readreport from '../components/showComponents/read-report'
 import deallabstate from '../components/showComponents/deal-labstate'
 import dealquestate from '../components/showComponents/deal-questate'
 import dealqueservice from '../components/showComponents/deal-queservice'
-import addteachproject from '../components/showComponents/add-teachproject'
+import addproject from '../components/showComponents/add-project'
+import addscore from '../components/showComponents/add-score'
 
 Vue.use(Router);
 
@@ -45,16 +48,14 @@ export default new Router({
       name: 'show',
       component: show
     },
-
-
     {
       path: '/Student',
       name: 'Student',
       component: Student,
       children:[
         {
-          path: '/Home',
-          name: 'Home',
+          path: '/StudentHome',
+          name: 'StudentHome',
           component: Home
         },
         {
@@ -142,8 +143,8 @@ export default new Router({
       component: Teacher,
       children:[
         {
-          path: '/Home',
-          name: 'Home',
+          path: '/TeacherHome',
+          name: 'TeacherHome',
           component: Home
         },
         {
@@ -182,9 +183,15 @@ export default new Router({
           component:teachcourse
         },
         {
-          path:'/add-teachproject',
-          name:'add-teachproject',
-          component:addteachproject
+
+          path: '/add-teachproject',
+          name: 'add-teachproject',
+          component: addteachproject
+        },
+        {
+          path:'/add-project',
+          name:'add-project',
+          component:addproject
         },
         {
           path:'/teachbook',
@@ -207,9 +214,14 @@ export default new Router({
           component:pmessage
         },
         {
-          path:'/pscore',
-          name:'pscore',
-          component:pscore
+          path: '/pscore',
+          name: 'pscore',
+          component: pscore
+        },
+        {
+          path:'/add-score',
+          name:'add-score',
+          component:addscore
         },
         {
           path:'/pproject',
@@ -217,9 +229,14 @@ export default new Router({
           component:pproject
         },
         {
-          path:'/preport',
-          name:'preport',
-          component:preport
+          path: '/preport',
+          name: 'preport',
+          component: preport
+        },
+        {
+          path:'/read-report',
+          name:'read-report',
+          component:readreport
         }
       ]
     },
@@ -231,8 +248,8 @@ export default new Router({
       component: Manager,
       children:[
         {
-          path: '/Home',
-          name: 'Home',
+          path: '/ManagerHome',
+          name: 'ManagerHome',
           component: Home
         },
         {

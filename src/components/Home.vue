@@ -31,6 +31,8 @@
       </el-aside>
 
       <el-main>
+
+        <div style="margin-top: 20px">
         <el-table :data="tableData1" height="400" border style="width: 100%" >
           <el-table-column prop="inform" label="通知" show-overflow-tooltip="true">
             <template slot-scope="scope">
@@ -41,6 +43,8 @@
           <el-table-column prop="uptime" label="发布时间" width="110" show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="deadline" label="有效期限"width="110" show-overflow-tooltip="true"></el-table-column>
         </el-table>
+
+        </div>
       </el-main>
 
     </el-container>
