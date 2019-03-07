@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "deal-labstate"
+        name: "add-project"
     }
 </script>
 

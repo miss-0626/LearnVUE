@@ -29,9 +29,9 @@
       <el-submenu index="5">
         <template slot="title">信息查询与维护</template>
         <el-menu-item index="pmessage">个人信息</el-menu-item>
-        <el-menu-item index="pscore">成绩查询</el-menu-item>
-        <el-menu-item index="pproject">项目申报情况</el-menu-item>
-        <el-menu-item index="preport">实验报告</el-menu-item>
+        <el-menu-item index="add-score">上传成绩</el-menu-item>
+        <el-menu-item index="add-project">项目上传与审核</el-menu-item>
+        <el-menu-item index="read-report">批改实验报告</el-menu-item>
       </el-submenu>
     </el-menu>
 

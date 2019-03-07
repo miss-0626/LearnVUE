@@ -21,7 +21,12 @@ import pmessage from '../components/showComponents/pmessage'
 import pscore from '../components/showComponents/pscore'
 import pproject from '../components/showComponents/pproject'
 import preport from '../components/showComponents/preport'
+import readreport from '../components/showComponents/read-report'
 import deallabstate from '../components/showComponents/deal-labstate'
+import dealquestate from '../components/showComponents/deal-questate'
+import dealqueservice from '../components/showComponents/deal-queservice'
+import addproject from '../components/showComponents/add-project'
+import addscore from '../components/showComponents/add-score'
 
 Vue.use(Router);
 
@@ -42,6 +47,8 @@ export default new Router({
       name: 'show',
       component: show
     },
+
+
     {
       path: '/Student',
       name: 'Student',
@@ -129,6 +136,8 @@ export default new Router({
         }
       ]
     },
+
+
     {
       path: '/Teacher',
       name: 'Teacher',
@@ -175,9 +184,9 @@ export default new Router({
           component:teachcourse
         },
         {
-          path:'/teachproject',
-          name:'teachproject',
-          component:teachproject
+          path:'/add-project',
+          name:'add-project',
+          component:addproject
         },
         {
           path:'/teachbook',
@@ -200,9 +209,9 @@ export default new Router({
           component:pmessage
         },
         {
-          path:'/pscore',
-          name:'pscore',
-          component:pscore
+          path:'/add-score',
+          name:'add-score',
+          component:addscore
         },
         {
           path:'/pproject',
@@ -210,9 +219,9 @@ export default new Router({
           component:pproject
         },
         {
-          path:'/preport',
-          name:'preport',
-          component:preport
+          path:'/read-report',
+          name:'read-report',
+          component:readreport
         }
       ]
     },
@@ -249,14 +258,14 @@ export default new Router({
           component:quenumber
         },
         {
-          path:'/questate',
-          name:'questate',
-          component:questate
+          path:'/deal-questate',
+          name:'deal-questate',
+          component:dealquestate
         },
         {
-          path:'/queservice',
-          name:'queservice',
-          component:queservice
+          path:'/deal-queservice',
+          name:'deal-queservice',
+          component:dealqueservice
         },
         {
           path:'/teachcourse',

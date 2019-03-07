@@ -6,14 +6,14 @@
       <el-submenu index="2">
         <template slot="title">实验室介绍</template>
         <el-menu-item index="labshow">基本信息</el-menu-item>
-        <el-menu-item index="deal-labstate">状态</el-menu-item>
+        <el-menu-item index="deal-labstate">实验室预约处理</el-menu-item>
       </el-submenu>
       <el-submenu index="3">
         <template slot="title">设备介绍</template>
         <el-menu-item index="queshow">基本信息</el-menu-item>
         <el-menu-item index="quenumber">所属实验室及编号</el-menu-item>
-        <el-menu-item index="questate">状态</el-menu-item>
-        <el-menu-item index="queservice">维修申报</el-menu-item>
+        <el-menu-item index="deal-questate">设备预约处理</el-menu-item>
+        <el-menu-item index="deal-queservice">维修处理</el-menu-item>
       </el-submenu>
       <el-submenu index="4">
         <template slot="title">教学资源</template>
