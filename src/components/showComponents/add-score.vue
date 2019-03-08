@@ -102,7 +102,7 @@
       return {
         tableData8: [{
           number:'201500001',
-          name:'小明',
+          name:'小明1',
           year:'2018-2019',
           term:'1',
           course:'通信技术',
@@ -202,8 +202,8 @@
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
+//        this.editRow = JSON.stringify(this.tableData8[index]);
         this.form = this.tableData8[index];
-        console.log(this.tableData8[index])
         this.currentIndex = index;
         this.dialogFormVisible = true;
       },
