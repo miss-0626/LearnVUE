@@ -46,7 +46,13 @@ export default new Router({
     {
       path: '/show',
       name: 'show',
-      component: show
+      component: show,
+      children:[
+        {
+          path: '/Login',
+          name: 'Login',
+          component: Login
+        }]
     },
     {
       path: '/Student',

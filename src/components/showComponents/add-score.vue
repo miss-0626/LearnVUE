@@ -26,7 +26,7 @@
                    {text: '华南先进光电子研究院', value: '华南先进光电子研究院'}]" :filter-method="filterHandler">
       </el-table-column>
       <el-table-column label="操作">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
           </el-button>
           <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
@@ -186,11 +186,11 @@
           course: '',
           score: '',
           institute: ''
-        }
+        };
         this.dialogFormVisible = true;
       },
       update() {
-      this.form.date = reformat(this.form.date);
+        this.form.date = reformat(this.form.date);
         this.tableData8.push(this.form);
         this.dialogFormVisible = false;
       },
@@ -213,7 +213,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData8.splice(index, 1)
+          this.tableData8.splice(index, 1);
         this.$message({
           type: 'success',
           message: '删除成功!'
