@@ -5,7 +5,9 @@
     <el-table-column prop="teacher" label="指导老师" width="180"></el-table-column>
     <el-table-column prop="state" label="申报情况" width="100">
     <template slot-scope="scope">
-      <el-tag :type="scope.row.tag === '成功'?'失败': 'danger'" disable-transitions>{{scope.row.tag}}</el-tag>
+      <el-tag type="success" v-if="scope.row.state==='成功'" disable-transitions>{{scope.row.state}}</el-tag>
+      <el-tag type="danger" v-else-if="scope.row.state==='失败'" disable-transitions>{{scope.row.state}}</el-tag>
+      <el-tag v-else="scope.row.state==='待处理'" disable-transitions>{{scope.row.state}}</el-tag>
     </template>
   </el-table-column>
   </el-table>
@@ -20,17 +22,17 @@
           tableData7: [{
             project: '挑战杯',
             teacher: '崔老师',
-            tag: '待处理'
+            state: '待处理'
           },
             {
               project: '挑战杯',
               teacher: '崔老师',
-              tag: '失败'
+              state: '失败'
             },
             {
               project: '挑战杯',
               teacher: '崔老师',
-              tag: '成功'
+              state: '成功'
             }]
         }
       }

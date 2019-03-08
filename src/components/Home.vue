@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h3>{{msg}}</h3>
+    <h3 style="padding: 5px 15px">{{msg}}</h3>
     <el-container>
 
       <el-aside width="600px">

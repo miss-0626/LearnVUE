@@ -1,7 +1,8 @@
 <template>
   <div class="login">
   <el-row :span="24" class="login">
-    <div style=";margin:120px 400px 0px 400px;border:2px solid #3299cc;border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+    <div class="login-wrap" v-show="showLogin"
+      style=";margin:120px 400px 0px 400px;border:2px solid #3299cc;border-radius: 4px;">
     <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="100px">
       <el-row type="flex" justify="center">
         <el-col :span="10">
@@ -13,7 +14,7 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-      <el-form-item label="用户名" prop="name">
+      <el-form-item class="labelColor" label="用户名" prop="name">
         <el-input v-model="user.name" placeholder="请输入用户名"></el-input>
       </el-form-item>
         </el-col>
@@ -21,12 +22,11 @@
 
       <el-row type="flex" justify="center">
         <el-col :span="12">
-      <el-form-item label="密码" placeholder="请输入密码" prop="pass">
+      <el-form-item class="labelColor" label="密码" placeholder="请输入密码" prop="pass">
         <el-input v-model="user.pass" type="password" ></el-input>
       </el-form-item>
         </el-col>
       </el-row>
-
       <el-row type="flex" justify="center">
       <el-radio-group :span="12" v-model="user.role"  prop="role">
         <el-radio :label="1">教师</el-radio>
@@ -35,7 +35,12 @@
       </el-radio-group>
       </el-row>
       <el-row type="flex" justify="center">
-        <el-col :span="8">
+        <el-col :span="10">
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-upload" @click="ToRegister">注册</el-button>
+          </el-form-item>
+        </el-col>
+        <el-col :span="14">
       <el-form-item>
         <el-button type="primary" icon="el-icon-upload" @click="login">登录</el-button>
       </el-form-item>
@@ -43,20 +48,97 @@
       </el-row>
     </el-form>
     </div>
+
+    <div class="register-wrap" v-show="showRegister"
+         style=";margin:120px 400px 0 400px;border:2px solid #3299cc;border-radius: 4px;">
+      <el-form ref="loginForm" :model="user" :rules="rules" status-icon label-width="100px">
+        <el-row type="flex" justify="center">
+          <el-col :span="10">
+            <el-form-item label-width="70px">
+              <span><font color="#1e90ff" size="4">注册</font></span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="14">
+            <el-form-item class="labelColor" label="用户名" prop="name">
+              <el-input v-model="user.newname" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="14">
+            <el-form-item class="labelColor" label="密码" placeholder="请输入密码" prop="pass">
+              <el-input v-model="user.newpass" type="password" ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row type="flex" justify="center">
+          <el-col :span="14">
+            <el-form-item class="labelColor" label="身份" placeholder="请选择你的身份" prop="pass">
+          <el-select v-model="user.value">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <el-col :span="14">
+            <el-form-item>
+              <el-button type="primary" icon="el-icon-upload" @click="register">注册</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center">
+          <el-col :span="18">
+            <el-form-item>
+              <span v-on:click="ToLogin">已有账号？马上登录</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
   </el-row>
   </div>
 </template>
 
 <<script>
+  import {setCookie,getCookie} from '../common/cookie.js'
+
   export default {
-    name:'login',
+   /* name:'login',
+    mounted(){
+      /!*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*!/
+      if(getCookie('username')){
+        this.$router.push('/home')
+      }
+    },*/
     data () {
       return {
           user: {
           name: '',
           pass: '',
-          role: 2
-                }
+          role: 2,
+          newname: '',
+          newpass: '',
+          value: ''
+                },
+        options: [{
+          value: '1',
+          label: '教师'
+        }, {
+          value: '2',
+          label: '学生'
+        }, {
+          value: '3',
+          label: '管理员'
+        }],
+        showLogin: true,
+        showRegister: false
               }
     },
 
@@ -74,8 +156,7 @@
 
 
     methods: {
-      login ()
-      {
+      login () {
         this.$refs.loginForm.validate((valid) => {
           if(valid) {
             if (this.user.name === 'admin' && this.user.pass === '123' ) {
@@ -84,9 +165,10 @@
                 message: '欢迎,' + this.user.name + '登录大数据实验教学管理系统!',
                 duration: 3500
               })
+              setCookie('username',this.username,1000*60)
               /*this.$router.push({path: 'show'})*/
               if(this.user.role===1){   this.$router.push({path: 'Teacher'})  }
-              else if(this.user.role===2){  this.$router.push({path: 'Home'})  }
+              else if(this.user.role===2){  this.$router.push({path: 'Student'})  }
               else{  this.$router.push({path: 'Manager'})  }
             }
             else {
@@ -102,13 +184,46 @@
           }
         }
       )
+      },
+      ToRegister(){
+        this.showRegister = true;
+        this.showLogin = false
+      },
+      ToLogin(){
+        this.showRegister = false;
+        this.showLogin = true
+      },
+      register(){
+        if(this.user.newname === "" || this.user.newpass === ""|| this.user.value === ""){
+          alert("请输入用户名或密码并确认身份")
+        }else{
+          let data = {'user.name':this.user.newname,'user.pass':this.user.newpass,'user.role':this.user.value};
+          this.$http.post('http://localhost/vueapi/index.php/Home/user/register',data).then((res)=>{
+            console.log(res)
+          if(res.data === "ok"){
+            this.$notify({
+              type: 'success',
+              message: '注册成功',
+              duration: 3500
+            })
+            this.user.name = '';
+            this.user.pass = '';
+            /*注册成功之后再跳回登录页*/
+            setTimeout(function(){
+              this.showRegister = false;
+              this.showLogin = true;
+              this.showTishi = false
+            }.bind(this),1000)
+          }
+        })
+        }
       }
       }
   }
 </script>
 
 
-<style scoped>
+<style>
 .login {
     width: 100%;
     padding-bottom: 31%;
@@ -120,4 +235,8 @@
     -moz-background-size: cover;
     -o-background-size: cover;
   }
+.labelColor .el-form-item__label{
+  width: 90px;
+  color: #1e90ff
+}
 </style>
