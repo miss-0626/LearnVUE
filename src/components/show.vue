@@ -11,7 +11,7 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click="quit">退出登录</el-dropdown-item>
+            <el-dropdown-item  @click="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-row>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import { setCookie,getCookie,delCookie } from '../common/cookie.js'
+/*  import { setCookie,getCookie,delCookie } from '../common/cookie.js'*/
 
     export default {
         name: "show",
@@ -29,20 +29,37 @@
             name:''
           }
       },
-      mounted(){
-        /*页面挂载获取保存的cookie值，渲染到页面上*/
+     /* mounted(){
+        /!*页面挂载获取保存的cookie值，渲染到页面上*!/
         let uname = getCookie('username');
         this.name = uname;
-        /*如果cookie不存在，则跳转到登录页*/
+        /!*如果cookie不存在，则跳转到登录页*!/
         if(uname === ""){
           this.$router.push({path: 'Login'})
         }
-      },
+      },*/
       methods:{
-        quit(){
+        loginout(){
           /*删除cookie*/
-          this.$router.push({path: 'Login'});
-          delCookie('username')
+          /*delCookie('username')*/
+          /*this.$router.push( '/');*/
+          var self = this
+          this.$confirm('您确定要退出吗?', '退出管理平台', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }).then(() => {
+            const info = {
+              'userkey': localStorage.getItem('userKey')
+            }
+            self.$store.dispatch('LogOut', info).then(() => {
+            self.$router.push({ path: '/login' })
+        }).catch(() => {
+          })
+        }).catch(() => {
+
+          })
+
+
         }
       }
     }

@@ -1,12 +1,12 @@
 <template>
   <div>
-  <el-row>
+  <el-row style="margin-top: 5px">
   <el-col class="head">
     <span>我的项目</span>
   <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增项目</el-button>
   </el-col>
   </el-row>
-  <el-table ref="Table1" :data="tableData9" height="450"  border style="width: 100%">
+  <el-table :data="tableData9" height="450"  border style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="project-table-expand">

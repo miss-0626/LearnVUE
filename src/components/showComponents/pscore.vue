@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="clearFilter">清除所有过滤器</el-button>
+    <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
     <el-table ref="filterTable" :data="tableData2" style="width: 100%">
       <el-table-column prop="year" label="学年"sortable  column-key="date"
                        :filters="[{text: '2018-2019', value: '2018-2019'},

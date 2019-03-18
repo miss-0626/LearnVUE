@@ -110,16 +110,17 @@
   import {setCookie,getCookie} from '../common/cookie.js'
 
   export default {
-   /* name:'login',
-    mounted(){
-      /!*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*!/
-      if(getCookie('username')){
-        this.$router.push('/home')
-      }
-    },*/
+    name:'login',
+
     data () {
       return {
-          user: {
+        /*    mounted(){
+              /!*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*!/
+              if(getCookie('username')){
+                this.$router.push('/home')
+              }
+            },*/
+        user: {
           name: '',
           pass: '',
           role: 2,
@@ -165,7 +166,7 @@
                 message: '欢迎,' + this.user.name + '登录大数据实验教学管理系统!',
                 duration: 3500
               })
-              setCookie('username',this.username,1000*60)
+             /* setCookie('username',this.username,1000*60)*/
               /*this.$router.push({path: 'show'})*/
               if(this.user.role===1){   this.$router.push({path: 'TeacherHome'})  }
               else if(this.user.role===2){  this.$router.push({path: 'StudentHome'})  }
@@ -212,7 +213,6 @@
             setTimeout(function(){
               this.showRegister = false;
               this.showLogin = true;
-              this.showTishi = false
             }.bind(this),1000)
           }
         })

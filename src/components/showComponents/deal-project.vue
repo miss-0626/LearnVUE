@@ -26,41 +26,17 @@
       <el-table-column prop="introduce" label="项目详情" show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleproject(scope.$index, scope.row)">申请项目</el-button>
+          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除项目
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog :title="申请项目" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="学号" :label-width="formLabelWidth">
-          <el-input v-model="form.number" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="自荐描述" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="form.selfdesc" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="项目名称" :label-width="formLabelWidth">
-          <el-input v-model="form.project" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="指导老师" :label-width="formLabelWidth">
-          <el-input v-model="form.teacher" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="borrow">申 请</el-button>
-      </div>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
   export default {
-    name: "teachproject",
+    name: "deal-project",
     data() {
       return {
         tableData2: [{
@@ -114,21 +90,23 @@
         const property = column['property'];
         return row[property] === value;
       },
-      handleproject(index, row) {
-        this.form = {
-          number: '',
-          name: '',
-          selfdesc:'',
-          project: '',
-          teacher: ''
-        };
-        this.dialogFormVisible = true;
-      },
-      cancel(){
-        this.dialogFormVisible = false;
-      },
-      borrow(){
-        this.dialogFormVisible = false;
+      handleDelete(index, row) {
+        this.$confirm('此操作将永久删除该条信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.tableData2.splice(index, 1);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+          this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
       }
     }
   }

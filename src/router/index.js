@@ -6,6 +6,8 @@ import Teacher from '../components/Teacher'
 import Manager from '../components/Manager'
 import Home from '../components/Home'
 import show from '../components/show'
+import showmsg from '../components/showmsg'
+import foot from '../components/foot'
 import labshow from '../components/showComponents/labshow'
 import labstate from '../components/showComponents/labstate'
 import queshow from '../components/showComponents/queshow'
@@ -21,11 +23,16 @@ import pmessage from '../components/showComponents/pmessage'
 import pscore from '../components/showComponents/pscore'
 import pproject from '../components/showComponents/pproject'
 import preport from '../components/showComponents/preport'
-import addteachproject from '../components/showComponents/add-teachproject'
 import readreport from '../components/showComponents/read-report'
+import deallabshow from '../components/showComponents/deal-labshow'
+import dealqueshow from '../components/showComponents/deal-queshow'
+import dealquenumber from '../components/showComponents/deal-quenumber'
 import deallabstate from '../components/showComponents/deal-labstate'
 import dealquestate from '../components/showComponents/deal-questate'
 import dealqueservice from '../components/showComponents/deal-queservice'
+import dealcourse from '../components/showComponents/deal-course'
+import dealproject from '../components/showComponents/deal-project'
+import dealteacher from '../components/showComponents/deal-teacher'
 import addproject from '../components/showComponents/add-project'
 import addscore from '../components/showComponents/add-score'
 
@@ -39,9 +46,30 @@ export default new Router({
       component: Login
     },
     {
+      path: '/Home',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/showmsg',
+      name: 'showmsg',
+      component: showmsg
+    },
+    {
+      path: '/foot',
+      name: 'foot',
+      component:foot
+    },
+    {
       path: '/Login',
       name: 'Login',
-      component: Login
+      component: Login,
+      children:[
+        {
+          path: '/Home',
+          name: 'Home',
+          component: Home
+        }]
     },
     {
       path: '/show',
@@ -65,81 +93,80 @@ export default new Router({
           component: Home
         },
         {
-          path:'/labshow',
-          name:'labshow',
+          path:'/Studentlabshow',
+          name:'Studentlabshow',
           component:labshow
         },
         {
-          path:'/labstate',
-          name:'labstate',
+          path:'/Studentlabstate',
+          name:'Studentlabstate',
           component:labstate
         },
         {
-          path:'/queshow',
-          name:'queshow',
+          path:'/Studentqueshow',
+          name:'Studentqueshow',
           component:queshow
         },
         {
-          path:'/quenumber',
-          name:'quenumber',
+          path:'/Studentquenumber',
+          name:'Studentquenumber',
           component:quenumber
         },
         {
-          path:'/questate',
-          name:'questate',
+          path:'/Studentquestate',
+          name:'Studentquestate',
           component:questate
         },
         {
-          path:'/queservice',
-          name:'queservice',
+          path:'/Studentqueservice',
+          name:'Studentqueservice',
           component:queservice
         },
         {
-          path:'/teachcourse',
-          name:'teachcourse',
+          path:'/Studentteachcourse',
+          name:'Studentteachcourse',
           component:teachcourse
         },
         {
-          path:'/teachproject',
-          name:'teachproject',
+          path:'/Studentteachproject',
+          name:'Studentteachproject',
           component:teachproject
         },
         {
-          path:'/teachbook',
-          name:'teachbook',
+          path:'/Studentteachbook',
+          name:'Studentteachbook',
           component:teachbook
         },
         {
-          path:'/teachrule',
-          name:'teachrule',
+          path:'/Studentteachrule',
+          name:'Studentteachrule',
           component:teachrule
         },
         {
-          path:'/teachers',
-          name:'teachers',
+          path:'/Studentteachers',
+          name:'Studentteachers',
           component:teachers
         },
         {
-          path:'/pmessage',
-          name:'pmessage',
+          path:'/Studentpmessage',
+          name:'Studentpmessage',
           component:pmessage
         },
         {
-          path:'/pscore',
-          name:'pscore',
+          path:'/Studentpscore',
+          name:'Studentpscore',
           component:pscore
         },
         {
-          path:'/pproject',
-          name:'pproject',
+          path:'/Studentpproject',
+          name:'Studentpproject',
           component:pproject
         },
         {
-          path:'/preport',
-          name:'preport',
+          path:'/Studentpreport',
+          name:'Studentpreport',
           component:preport
-        }
-      ]
+        }]
     },
 
 
@@ -154,45 +181,45 @@ export default new Router({
           component: Home
         },
         {
-          path:'/labshow',
-          name:'labshow',
+          path:'/Teacherlabshow',
+          name:'Teacherlabshow',
           component:labshow
         },
         {
-          path:'/labstate',
-          name:'labstate',
+          path:'/Teacherlabstate',
+          name:'Teacherlabstate',
           component:labstate
         },
         {
-          path:'/queshow',
-          name:'queshow',
+          path:'/Teacherqueshow',
+          name:'Teacherqueshow',
           component:queshow
         },
         {
-          path:'/quenumber',
-          name:'quenumber',
+          path:'/Teacherquenumber',
+          name:'Teacherquenumber',
           component:quenumber
         },
         {
-          path:'/questate',
-          name:'questate',
+          path:'/Teacherquestate',
+          name:'Teacherquestate',
           component:questate
         },
         {
-          path:'/queservice',
-          name:'queservice',
+          path:'/Teacherqueservice',
+          name:'Teacherqueservice',
           component:queservice
         },
         {
-          path:'/teachcourse',
-          name:'teachcourse',
+          path:'/Teacherteachcourse',
+          name:'Teacherteachcourse',
           component:teachcourse
         },
         {
 
-          path: '/add-teachproject',
-          name: 'add-teachproject',
-          component: addteachproject
+          path: '/Teacherteachproject',
+          name: 'Teacherteachproject',
+          component: teachproject
         },
         {
           path:'/add-project',
@@ -200,29 +227,24 @@ export default new Router({
           component:addproject
         },
         {
-          path:'/teachbook',
-          name:'teachbook',
+          path:'/Teacherteachbook',
+          name:'Teacherteachbook',
           component:teachbook
         },
         {
-          path:'/teachrule',
-          name:'teachrule',
+          path:'/Teacherteachrule',
+          name:'Teacherteachrule',
           component:teachrule
         },
         {
-          path:'/teachers',
-          name:'teachers',
+          path:'/Teacherteachers',
+          name:'Teacherteachers',
           component:teachers
         },
         {
-          path:'/pmessage',
-          name:'pmessage',
+          path:'/Teacherpmessage',
+          name:'Teacherpmessage',
           component:pmessage
-        },
-        {
-          path: '/pscore',
-          name: 'pscore',
-          component: pscore
         },
         {
           path:'/add-score',
@@ -230,21 +252,10 @@ export default new Router({
           component:addscore
         },
         {
-          path:'/pproject',
-          name:'pproject',
-          component:pproject
-        },
-        {
-          path: '/preport',
-          name: 'preport',
-          component: preport
-        },
-        {
           path:'/read-report',
           name:'read-report',
           component:readreport
-        }
-      ]
+        }]
     },
 
 
@@ -259,9 +270,9 @@ export default new Router({
           component: Home
         },
         {
-          path:'/labshow',
-          name:'labshow',
-          component:labshow
+          path:'/deal-labshow',
+          name:'deal-labshow',
+          component:deallabshow
         },
         {
           path:'/deal-labstate',
@@ -269,14 +280,14 @@ export default new Router({
           component:deallabstate
         },
         {
-          path:'/queshow',
-          name:'queshow',
-          component:queshow
+          path:'/deal-queshow',
+          name:'deal-queshow',
+          component:dealqueshow
         },
         {
-          path:'/quenumber',
-          name:'quenumber',
-          component:quenumber
+          path:'/deal-quenumber',
+          name:'deal-quenumber',
+          component:dealquenumber
         },
         {
           path:'/deal-questate',
@@ -289,49 +300,39 @@ export default new Router({
           component:dealqueservice
         },
         {
-          path:'/teachcourse',
-          name:'teachcourse',
-          component:teachcourse
+          path:'/deal-course',
+          name:'deal-course',
+          component:dealcourse
         },
         {
-          path:'/teachproject',
-          name:'teachproject',
-          component:teachproject
+          path:'/deal-project',
+          name:'deal-project',
+          component:dealproject
         },
         {
-          path:'/teachbook',
-          name:'teachbook',
+          path:'/Managerteachbook',
+          name:'Managerteachbook',
           component:teachbook
         },
         {
-          path:'/teachrule',
-          name:'teachrule',
+          path:'/Managerteachrule',
+          name:'Managerteachrule',
           component:teachrule
         },
         {
-          path:'/teachers',
-          name:'teachers',
-          component:teachers
+          path:'/deal-teacher',
+          name:'deal-teacher',
+          component:dealteacher
         },
         {
-          path:'/pmessage',
-          name:'pmessage',
+          path:'/Managerpmessage',
+          name:'Managerpmessage',
           component:pmessage
         },
         {
-          path:'/pscore',
-          name:'pscore',
-          component:pscore
-        },
-        {
-          path:'/pproject',
-          name:'pproject',
-          component:pproject
-        },
-        {
-          path:'/preport',
-          name:'preport',
-          component:preport
+          path:'/Managerscore',
+          name:'Managerscore',
+          component:addscore
         }
       ]
     }

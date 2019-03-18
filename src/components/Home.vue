@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h3 style="padding: 5px 15px">{{msg}}</h3>
+    <h3 style="padding: 5px 15px;margin-top: 5px">{{msg}}</h3>
     <el-container>
 
       <el-aside width="600px">
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'Home',
   props: {
@@ -69,13 +71,14 @@ export default {
       msg: '通知与展示',
       tableData1: [{
         inform:'这是一条最新通知这是一条最新通知这是一条最新通知',
-        url:'https://www.baidu.com',
+        url:'http://www.baidu.com/',
         unit:'物理与电信工程学院通信7班',
         uptime: '2019-03-02',
         deadline: '2019-05-01'
       },
         {
           inform:'这是一条最新通知',
+          url:'#showmsg',
           unit:'物理与电信工程学院',
           uptime: '2019-03-02',
           deadline: '2019-05-01'
@@ -211,23 +214,9 @@ h3{
   margin: 0;
   padding: 2px 5px 2px 20px;
 }
-/*ul {*/
-  /*list-style-type: none;*/
-  /*padding: 0;*/
-/*}*/
-/*li {*/
-  /*display: inline-block;*/
-  /*margin: 0 10px;*/
-/*}*/
 a {
   color: #42b983;
 }
-/*.el-aside {*/
-  /*background-color: white;*/
-  /*color: #333;*/
-  /*text-align: center;*/
-  /*line-height: 200px;*/
-/*}*/
 *{
   box-sizing: border-box;
   margin:0;

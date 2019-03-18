@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-row style="margin-top: 5px">
-  <el-button @click="clearFilter">清除所有过滤器</el-button>
-    <el-date-picker style="margin-left: 150px" v-model="value1" type="date" placeholder="选择借用日期"></el-date-picker>
-    <el-select v-model="value2" placeholder="选择借用时间">
-      <el-option v-for="item in options" :key="item.value2" :label="item.label" :value="item.value2">
+  <el-button @click="clearFilter">清除筛选</el-button>
+    <el-date-picker style="margin-left: 150px" v-model="data" type="date" placeholder="选择借用日期"></el-date-picker>
+    <el-select v-model="time" placeholder="选择借用时间">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
       </el-option>
     </el-select>
-    <el-button style="margin-left: 50px"  @click="handlefind(value1,value2)">空实验室查询</el-button>
+    <el-button style="margin-left: 50px"  @click="handlefind(data,time)">空实验室查询</el-button>
     </el-row>
   <el-table ref="filterTable" :data="tableData3" style="width: 100%">
     <el-table-column prop="name" label="实验室名称" ></el-table-column>
@@ -47,11 +47,11 @@
           <el-input type="textarea" v-model="form.use" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="借用日期" :label-width="formLabelWidth">
-          <el-date-picker  v-model="value1" type="date" placeholder="选择借用日期"></el-date-picker>
+          <el-date-picker  v-model="data" type="date" placeholder="选择借用日期"></el-date-picker>
         </el-form-item>
         <el-form-item label="借用时间" :label-width="formLabelWidth">
-          <el-select v-model="value2" placeholder="选择借用时间">
-            <el-option v-for="item in options" :key="item.value2" :label="item.label" :value="item.value2">
+          <el-select v-model="time" placeholder="选择借用时间">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -70,8 +70,8 @@
         name: "labstate",
       data() {
         return {
-          value1:'',
-          value2:'',
+          data:'',
+          time:'',
           options: [{
             value: '选项1',
             label: '第1,2节'
@@ -151,12 +151,12 @@
             name: '',
             labname: '',
             use:'',
-            value1: '',
-            value2: ''
+            data: '',
+            time: ''
           };
           this.dialogFormVisible = true;
         },
-        handlefind(value1,value2) {
+        handlefind(data,time) {
           console.log(index, row);
         },
         cancel(){

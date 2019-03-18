@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row style="margin-top: 5px">
-    <el-button @click="clearFilter">清除所有过滤器</el-button>
+    <el-button @click="clearFilter">清除筛选</el-button>
     <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增成绩</el-button>
     </el-row>
     <el-table ref="filterTable" :data="tableData8" style="width: 100%">
@@ -102,7 +102,7 @@
       return {
         tableData8: [{
           number:'201500001',
-          name:'小明1',
+          name:'小明',
           year:'2018-2019',
           term:'1',
           course:'通信技术',

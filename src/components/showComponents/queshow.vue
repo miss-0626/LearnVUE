@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="clearFilter">清除所有过滤器</el-button>
+    <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
     <el-table ref="filterTable" :data="tableData2" style="width: 100%">
       <el-table-column prop="quename" label="设备名称" width="150" column-key="date"
                        :filters="[{text: '示波器', value: '示波器'},
