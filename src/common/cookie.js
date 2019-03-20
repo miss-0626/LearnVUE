@@ -25,3 +25,16 @@ export function getCookie(c_name){
 export function delCookie(c_name){
   setCookie(c_name, "", -1)
 }
+
+// 设置localstorage
+export function putlocal (key, value) {
+  if (!key || !value) return
+  window.localStorage[key] = JSON.stringify(value)
+}
+// 获取localstorage
+export function getlocal (key) {
+  if (!key) return null
+  const tem = window.localStorage[key]
+  if (!tem) return null
+  return JSON.parse(tem)
+}

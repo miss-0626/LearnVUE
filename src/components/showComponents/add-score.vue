@@ -43,7 +43,7 @@
     </div>-->
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
+      <el-form ref="Form1" :model="form">
         <el-form-item label="学号" :label-width="formLabelWidth">
           <el-input v-model="form.number" auto-complete="off"></el-input>
         </el-form-item>
@@ -84,9 +84,9 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="danger" @click="cancel">取 消</el-button>
+        <el-button type="danger" @click="cancel(form.$index, form.row)">取 消</el-button>
         <el-button v-if="dialogStatus=='update'" type="primary" @click="update">新 增</el-button>
-        <el-button v-else type="primary" @click="editdate">修 改</el-button>
+        <el-button v-else type="primary" @click="editdate(form.$index, form.row)">修 改</el-button>
       </div>
     </el-dialog>
 
@@ -197,16 +197,27 @@
       editdate(){
         this.dialogFormVisible = false;
       },
-      cancel(){
+      cancel(index, row){
+        this.form = JSON.parse(this.row);
+        this.tableData8[index] = this.form;
         this.dialogFormVisible = false;
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
-//        this.editRow = JSON.stringify(this.tableData8[index]);
+        // 对象a转化为数据
+        this.row = JSON.stringify(this.tableData8[index]);
+        this.form = this.tableData8[index];
+        this.currentIndex = index;
+        // 数据转化为对象b
+        /*this.form = JSON.parse(this.row);*/
+        this.dialogFormVisible = true;
+      },
+      /*handleEdit(index, row) {
+        this.dialogStatus = "editdate";
         this.form = this.tableData8[index];
         this.currentIndex = index;
         this.dialogFormVisible = true;
-      },
+      },*/
       handleDelete(index, row) {
         this.$confirm('此操作将永久删除该条信息, 是否继续?', '提示', {
           confirmButtonText: '确定',

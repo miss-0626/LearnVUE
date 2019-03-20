@@ -7,11 +7,11 @@
           <img src="../assets/word.png">
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-        <span style="margin-right: 15px">欢迎{{name}}</span>
+        <span style="margin-right: 15px">欢迎 {{name}}</span>
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item  @click="loginout">退出登录</el-dropdown-item>
+            <el-dropdown-item><el-label  @click="loginout">退出登录</el-label></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-row>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-/*  import { setCookie,getCookie,delCookie } from '../common/cookie.js'*/
+  import { setCookie,getCookie,delCookie } from '../common/cookie.js'
 
     export default {
         name: "show",
@@ -29,37 +29,30 @@
             name:''
           }
       },
-     /* mounted(){
-        /!*页面挂载获取保存的cookie值，渲染到页面上*!/
+      mounted(){
+        /*页面挂载获取保存的cookie值，渲染到页面上*/
         let uname = getCookie('username');
         this.name = uname;
-        /!*如果cookie不存在，则跳转到登录页*!/
+        /*如果cookie不存在，则跳转到登录页*/
         if(uname === ""){
-          this.$router.push({path: 'Login'})
+          this.$router.push({path: '/Login'})
         }
-      },*/
+      },
       methods:{
         loginout(){
-          /*删除cookie*/
-          /*delCookie('username')*/
-          /*this.$router.push( '/');*/
-          var self = this
-          this.$confirm('您确定要退出吗?', '退出管理平台', {
+          this.$confirm('确认要退出系统吗?', '提示', {
             confirmButtonText: '确定',
-            cancelButtonText: '取消'
+            cancelButtonText: '取消',
+            type: 'warning'
           }).then(() => {
-            const info = {
-              'userkey': localStorage.getItem('userKey')
-            }
-            self.$store.dispatch('LogOut', info).then(() => {
-            self.$router.push({ path: '/login' })
-        }).catch(() => {
+            delCookie('username');
+          this.$router.push({path: '/Login' });
+          this.$message({
+            type: 'success',
+            message: '已退出登录'
           })
         }).catch(() => {
-
-          })
-
-
+        })
         }
       }
     }
