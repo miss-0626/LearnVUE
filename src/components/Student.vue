@@ -1,7 +1,7 @@
 <template>
   <div class="Student">
     <div class="wrapper">
-    <show></show>
+    <show @transferUser="getUser"></show>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router style=";box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
     <el-menu-item index="StudentHome">首页</el-menu-item>
     <el-submenu index="2">
@@ -12,7 +12,6 @@
     <el-submenu index="3">
         <template slot="title">设备介绍</template>
         <el-menu-item index="Studentqueshow">基本信息</el-menu-item>
-        <el-menu-item index="Studentquenumber">所属实验室及编号</el-menu-item>
         <el-menu-item index="Studentquestate">状态和预约</el-menu-item>
         <el-menu-item index="Studentqueservice">维修申报</el-menu-item>
       </el-submenu>
@@ -30,13 +29,18 @@
     <el-submenu index="5">
       <template slot="title">信息查询与维护</template>
       <el-menu-item index="Studentpmessage">个人信息</el-menu-item>
+      <el-menu-item index="Studentpassword">修改密码</el-menu-item>
       <el-menu-item index="Studentpscore">成绩查询</el-menu-item>
+      <el-submenu index="5-4">
+        <template slot="title">申请信息</template>
       <el-menu-item index="Studentpproject">项目申报情况</el-menu-item>
+      <el-menu-item index="p-lab-que">预约情况</el-menu-item>
+      </el-submenu>
       <el-menu-item index="Studentpreport">实验报告</el-menu-item>
     </el-submenu>
+    <el-menu-item index="Studentstudy">学习探讨区</el-menu-item>
   </el-menu>
-
-    <router-view/>
+      <router-view></router-view>
     </div>
   <foot></foot>
   </div>
@@ -46,20 +50,26 @@
 /*  import  from './'*/
   import show from './show.vue'
   import foot from './foot.vue'
+import LabDetail from "./showComponents/lab-detail";
 
     export default {
         name: "Student",
       components:{
+        LabDetail,
           show,
           foot
       },
       data() {
         return {
           activeIndex: 'StudentHome',
-          Home: '1'
+          Home: '1',
+          username:''
         };
       },
       methods: {
+          getUser (msg) {
+            this.username = msg;
+          },
                 handleSelect(key, keyPath) {
                   console.log(key, keyPath);
         }

@@ -2,7 +2,6 @@
   <div class="home">
     <h3 style="padding: 5px 15px;margin-top: 5px">{{msg}}</h3>
     <el-container>
-
       <el-aside width="600px">
         <div id="slider" style=";margin:40px 10px;">
           <div class="window" @mouseover="stop" @mouseleave="play">
@@ -31,8 +30,10 @@
       </el-aside>
 
       <el-main>
-
         <div style="margin-top: 20px">
+          <div v-if="role === 3">
+          <el-button type="primary"  size="medium" @click="add" style="float:right;margin-right:30px">新增通知</el-button>
+          </div>
         <el-table :data="tableData1" height="400" border style="width: 100%" >
           <el-table-column prop="inform" label="通知" show-overflow-tooltip="true">
             <template slot-scope="scope">
@@ -41,18 +42,55 @@
           </el-table-column>
           <el-table-column prop="unit" label="发布单位" width="150" show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="uptime" label="发布时间" width="110" show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="deadline" label="有效期限"width="110" show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="deadline" label="有效期限" width="110" show-overflow-tooltip="true"></el-table-column>
         </el-table>
+
+          <el-dialog :title="新增通知" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="标题" :label-width="formLabelWidth">
+              <el-input v-model="form.inform" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="发布单位" :label-width="formLabelWidth">
+              <el-input v-model="form.unit" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="发布时间" :label-width="formLabelWidth">
+              <el-input v-model="form.uptime" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="有效期限" :label-width="formLabelWidth">
+              <el-input v-model="form.deadline" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="内容" :label-width="formLabelWidth">
+              <el-input type="textarea" :rows="4" v-model="form.main" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="danger" @click="cancel" size="medium">取 消</el-button>
+            <el-button type="primary" @click="upinform" size="medium">新 增</el-button>
+          </div>
+        </el-dialog>
 
         </div>
       </el-main>
-
     </el-container>
+
+    <div class="projects">
+      <h2 style="padding: 5px 15px;margin-top: 5px">科研项目</h2>
+      <ul>
+        <li v-for="item in projectList"> <img :src="item.imgSrc" /> </li>
+      </ul>
+    </div>
+
+     <div class="teachers">
+       <h2 style="padding: 5px 15px;margin-top: 5px">优秀教师</h2>
+       <ul>
+         <li v-for="item in teacherList"> <img :src="item.imgSrc" /> </li>
+       </ul>
+     </div>
   </div>
 </template>
 
 <script>
-
+  import { reformat } from '../common/reformartDate'
 
 export default {
   name: 'Home',
@@ -69,6 +107,21 @@ export default {
   data () {
     return {
       msg: '通知与展示',
+      role:'',
+      projectList :[
+        {'imgSrc':'../static/image/5.jpg'},
+        {'imgSrc':'../static/image/5.jpg'},
+        {'imgSrc':'../static/image/5.jpg'},
+        {'imgSrc':'../static/image/5.jpg'},
+        {'imgSrc':'../static/image/5.jpg'}
+      ],
+      teacherList :[
+        {'imgSrc':'../static/image/tzl.png'},
+        {'imgSrc':'../static/image/tzl.png'},
+        {'imgSrc':'../static/image/tzl.png'},
+        {'imgSrc':'../static/image/tzl.png'},
+        {'imgSrc':'../static/image/tzl.png'}
+      ],
       tableData1: [{
         inform:'这是一条最新通知这是一条最新通知这是一条最新通知',
         url:'http://www.baidu.com/',
@@ -130,12 +183,22 @@ export default {
         {img:'../static/image/4.jpg'},
         {img:'../static/image/5.jpg'}
       ],
+      dialogFormVisible: false,
+      formLabelWidth: '80px',
+      form: {},
       imgWidth:550,
       currentIndex:1,
       distance:-550,
       transitionEnd: true,
       speed: this.initialSpeed
     }
+  },
+  created:function(){
+    this.getParams();
+  },
+  watch: {
+    // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
+    '$route': 'getParams'
   },
   computed:{
     containerStyle() {
@@ -151,9 +214,42 @@ export default {
     this.init()
   },
   methods:{
+    add() {
+      this.form = {
+        inform: '',
+        unit:'',
+        uptime: '',
+        deadline: '',
+        main: ''
+      };
+      this.dialogFormVisible = true;
+    },
+    upinform() {
+      this.form.date = reformat(this.form.date);
+      // this.tableData1.push(this.form);
+      this.tableData1.splice(0, 0,{
+        inform: this.form.inform,
+        unit:this.form.unit,
+        uptime: this.form.uptime,
+        deadline:this.form.deadline,
+        main:this.form.main,
+        url:'#showmsg'
+      });
+      this.dialogFormVisible = false;
+    },
+    cancel(){
+      this.dialogFormVisible = false;
+    },
+    getParams:function(){
+      // 取到路由带过来的参数
+      var a = this.$route.query.role;
+      // 将数据放在当前组件的数据内
+/*      console.log("传来的参数=="+routerParams);*/
+      this.role = a;
+    },
     init() {
-      this.play()
-      window.onblur = function() { this.stop() }.bind(this)
+      this.play();
+      window.onblur = function() { this.stop() }.bind(this);
       window.onfocus = function() { this.play() }.bind(this)
     },
     move(offset, direction, speed) {
@@ -214,6 +310,9 @@ h3{
   margin: 0;
   padding: 2px 5px 2px 20px;
 }
+h2{
+  font-weight:normal;
+}
 a {
   color: #42b983;
 }
@@ -227,6 +326,7 @@ ol,ul{
 }
 #slider{
   text-align: center;
+  width: auto;
 }
 .window{
   position:relative;
@@ -281,4 +381,30 @@ img{
 .dots .dotted{
   background-color:orange;
 }
+.projects{
+  width:100%;
+  height:auto;
+}
+.teachers{
+  width:100%;
+  height:auto;
+}
+.teachers ul,.projects ul{
+  margin:10px 30px;
+  width: 100%;
+  height:auto;
+  float: left;
+}
+.teachers ul li,.projects ul li{
+  width:230px;
+  height:auto;
+  margin:10px;
+  display: block;
+  float:left;
+}
+.teachers ul li img,.projects ul li img{
+  width: 230px;
+  height: 200px;
+}
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 5px">
-    <el-table ref="filterTable" :data="tableData12" style="width: 100% ">
+    <el-table ref="filterTable" :data="tableData15.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100% ">
       <el-table-column prop="number" label="学号" sortable></el-table-column>
       <el-table-column prop="name" label="姓名" sortable></el-table-column>
       <el-table-column prop="experiment" label="实验名称" sortable></el-table-column>
@@ -13,6 +13,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData15.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -21,7 +30,9 @@
         name: "read-report",
       data() {
         return {
-          tableData12: [{
+          currentPage:1,
+          pagesize:5,
+          tableData15: [{
             number: '201500001',
             name: '小明',
             experiment: '现代通信网',
@@ -42,6 +53,16 @@
             experiment: '现代通信网',
             report: '../static/image/5.jpg'
           }]
+        }
+      },
+      methods:{
+        handleSizeChange: function (size) {
+          this.pagesize = size;
+          console.log(this.pagesize);
+        },
+        handleCurrentChange: function(currentPage){
+          this.currentPage = currentPage;
+          console.log(this.currentPage);
         }
       }
     }

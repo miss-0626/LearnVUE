@@ -4,7 +4,7 @@
     <el-button @click="clearFilter">清除筛选</el-button>
     <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增成绩</el-button>
     </el-row>
-    <el-table ref="filterTable" :data="tableData8" style="width: 100%">
+    <el-table ref="filterTable" :data="tableData13.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
       <el-table-column prop="number" label="学号" sortable></el-table-column>
       <el-table-column prop="name" label="姓名" sortable></el-table-column>
       <el-table-column prop="year" label="学年"sortable  column-key="date"
@@ -34,13 +34,15 @@
         </template>
       </el-table-column>
     </el-table>
-
-<!--    <div class="page">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page.sync="currentPage3" :page-size="100"
-                     layout="prev, pager, next, jumper" :total="1000">
-      </el-pagination>
-    </div>-->
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData13.length">
+    </el-pagination>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="Form1" :model="form">
@@ -82,7 +84,15 @@
             <el-option label="华南先进光电子研究院" value="华南先进光电子研究院"></el-option>
           </el-select>
         </el-form-item>
+<!--        <el-form-item>
+          <template slot-scope="scope">
+            <el-button type="danger" @click="cancel(scope.$index, scope.row)">取 消</el-button>
+            <el-button v-if="dialogStatus=='update'" type="primary" @click="update">新 增</el-button>
+            <el-button v-else type="primary" @click="editdate(scope.$index, scope.row)">修 改</el-button>
+          </template>
+        </el-form-item>-->
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button type="danger" @click="cancel(form.$index, form.row)">取 消</el-button>
         <el-button v-if="dialogStatus=='update'" type="primary" @click="update">新 增</el-button>
@@ -100,7 +110,9 @@
     name: "add-score",
     data() {
       return {
-        tableData8: [{
+        currentPage:1,
+        pagesize:5,
+        tableData13: [{
           number:'201500001',
           name:'小明',
           year:'2018-2019',
@@ -168,6 +180,13 @@
         },
       }
     },
+    watch: {
+      dialogFormVisible: function(val, oldVal) {
+        setTimeout(() => {
+          this.getTableData13();
+        }, 100);
+      },
+    },
     methods: {
       clearFilter() {
         this.$refs.filterTable.clearFilter();
@@ -175,6 +194,14 @@
       filterHandler(value, row, column) {
         const property = column['property'];
         return row[property] === value;
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
       },
       add() {
         this.dialogStatus = "update";
@@ -191,22 +218,22 @@
       },
       update() {
         this.form.date = reformat(this.form.date);
-        this.tableData8.push(this.form);
+        this.tableData13.push(this.form);
         this.dialogFormVisible = false;
       },
       editdate(){
         this.dialogFormVisible = false;
       },
       cancel(index, row){
-        this.form = JSON.parse(this.row);
-        this.tableData8[index] = this.form;
+        this.reform = JSON.parse(this.row);
+        this.tableData13[index] = this.reform;
         this.dialogFormVisible = false;
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
         // 对象a转化为数据
-        this.row = JSON.stringify(this.tableData8[index]);
-        this.form = this.tableData8[index];
+        this.row = JSON.stringify(this.tableData13[index]);
+        this.form = this.tableData13[index];
         this.currentIndex = index;
         // 数据转化为对象b
         /*this.form = JSON.parse(this.row);*/
@@ -214,7 +241,7 @@
       },
       /*handleEdit(index, row) {
         this.dialogStatus = "editdate";
-        this.form = this.tableData8[index];
+        this.form = this.tableData13[index];
         this.currentIndex = index;
         this.dialogFormVisible = true;
       },*/
@@ -224,7 +251,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData8.splice(index, 1);
+          this.tableData13.splice(index, 1);
         this.$message({
           type: 'success',
           message: '删除成功!'

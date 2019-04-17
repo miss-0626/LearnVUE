@@ -9,14 +9,9 @@
       </el-select>
       <el-button style="margin-left: 50px"  @click="handlefind(data,time)">空闲设备查询</el-button>
     </el-row>
-    <el-table ref="filterTable" :data="tableData3" style="width: 100%">
-      <el-table-column prop="quename" label="设备名称" width="150" column-key="date"
-                       :filters="[{text: '示波器', value: '示波器'},
-                                  {text: '高频信号发生器', value: '高频信号发生器'},
-                                  {text: '频谱仪', value: '频谱仪'},
-                                  {text: '计算机', value: '计算机'}]" :filter-method="filterHandler">
-      </el-table-column>
-      <el-table-column prop="number" label="设备编号"></el-table-column>
+    <el-table ref="filterTable" :data="tableData6.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.equiName.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
+      <el-table-column prop="equiNum" label="设备编号"></el-table-column>
+      <el-table-column prop="equiName" label="设备名称"></el-table-column>
       <el-table-column prop="state" label="状态"
                        :filters="[{ text: '占用', value: '占用' },
                                   { text: '空闲', value: '空闲' }]"
@@ -31,23 +26,39 @@
           <el-button size="mini" @click="handleuse(scope.$index, scope.row)">申请借用</el-button>
         </template>
       </el-table-column>
+      <el-table-column align="right" width="220">
+        <template slot="header" slot-scope="scope">
+          <el-input v-model="search" size="mini" placeholder="输入设备名称搜索">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
+        </template>
+      </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData6.length">
+    </el-pagination>
 
     <el-dialog :title="设备借用申请" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="借用人学号" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="借用人学号" :label-width="formLabelWidth" prop="number">
           <el-input v-model="form.number" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备名称" :label-width="formLabelWidth">
+        <el-form-item label="设备名称" :label-width="formLabelWidth" prop="quename">
           <el-input v-model="form.quename" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备编号" :label-width="formLabelWidth">
+        <el-form-item label="设备编号" :label-width="formLabelWidth" prop="quenumber">
           <el-input  v-model="form.quenumber" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="描述设备用途" :label-width="formLabelWidth">
+        <el-form-item label="描述设备用途" :label-width="formLabelWidth"prop="use">
           <el-input type="textarea" v-model="form.use" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="借用日期" :label-width="formLabelWidth">
@@ -60,7 +71,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer;margin-top: 5px">
         <el-button type="danger" @click="cancel">取 消</el-button>
         <el-button type="primary" @click="borrow">申 请</el-button>
       </div>
@@ -74,8 +85,11 @@
     name: "questate",
     data() {
       return {
+        currentPage:1,
+        pagesize:5,
         data:'',
         time:'',
+        search:'',
         options: [{
           value: '选项1',
           label: '第1,2节'
@@ -107,27 +121,55 @@
           value: '选项10',
           label: '整天'
         }],
-        tableData3: [{
-          quename:'示波器',
-          number:'10-001',
-          state: '空闲'
-        },{
-          quename:'高频信号发生器',
-          number:'10-001',
-          state: '空闲'
-        },{
-          quename:'频谱仪',
-          number:'10-001',
-          state: '占用'
-        },{
-          quename:'计算机',
-          number:'10-001',
-          state: '空闲'
-        }],
+        tableData6: [ {
+          equiId:'1',
+          equiNum:'1-101',
+          equiName:'示波器',
+          labNum:'8-520',
+          state:'空闲'
+        },
+          {
+            equiId:'11',
+            equiNum:'1-101',
+            equiName:'信号发生器',
+            labNum:'8-520',
+            state:'占用'
+          },{
+            equiId:'12',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            equiId:'13',
+            equiNum:'1-101',
+            equiName:'信号发生器',
+            labNum:'8-520',
+            state:'占用'
+          },{
+            equiId:'15',
+            equiNum:'1-101',
+            equiName:'信号发生器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            equiId:'18',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          }],
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},
-        currentIndex: ''
+        currentIndex: '',
+        rules: {
+          number:   [{required: true, message: '请输入学号', trigger: 'blur'}],
+          name:     [{required: true, message: '请输入姓名', trigger: 'blur'}],
+          quename : [{required: true, message: '请输入借用设备名称', trigger: 'blur'}],
+          quenumber:   [{required: true, message: '请输入设备编号', trigger: 'blur'}],
+          use:      [{required: true, message: '请描述用途', trigger: 'blur'}]
+        }
       }
     },
     methods: {
@@ -161,6 +203,14 @@
       },
       borrow(){
         this.dialogFormVisible = false;
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
-    <el-table :data="tableData2" border style="width: 100%">
+    <el-table :data="tableData8.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="project-table-expand">
@@ -26,26 +26,35 @@
       <el-table-column prop="introduce" label="项目详情" show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleproject(scope.$index, scope.row)">申请项目</el-button>
+          <el-button size="mini" type="primary" @click="handleproject(scope.$index, scope.row)">申请项目</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData8.length">
+    </el-pagination>
 
     <el-dialog :title="申请项目" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="学号" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="学号" :label-width="formLabelWidth" prop="number">
           <el-input v-model="form.number" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="自荐描述" :label-width="formLabelWidth">
+        <el-form-item label="自荐描述" :label-width="formLabelWidth"  prop="selfdesc">
           <el-input type="textarea" v-model="form.selfdesc" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="项目名称" :label-width="formLabelWidth">
+        <el-form-item label="项目名称" :label-width="formLabelWidth"  prop="project">
           <el-input v-model="form.project" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="指导老师" :label-width="formLabelWidth">
+        <el-form-item label="指导老师" :label-width="formLabelWidth"  prop="teacher">
           <el-input v-model="form.teacher" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -63,7 +72,9 @@
     name: "teachproject",
     data() {
       return {
-        tableData2: [{
+        currentPage:1,
+        pagesize:5,
+        tableData8: [{
           name:'挑战杯',
           teacher:'崔老师',
           institute:'物理与电信工程学院',
@@ -103,7 +114,14 @@
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},
-        currentIndex: ''
+        currentIndex: '',
+        rules: {
+          number:   [{required: true, message: '请输入学号', trigger: 'blur'}],
+          name:     [{required: true, message: '请输入姓名', trigger: 'blur'}],
+          selfdesc : [{required: true, message: '向老师推荐一下你吧', trigger: 'blur'}],
+          project : [{required: true, message: '请输入申请的项目名称', trigger: 'blur'}],
+          teacher:      [{required: true, message: '请输入指导老师', trigger: 'blur'}]
+        }
       }
     },
     methods: {
@@ -129,6 +147,14 @@
       },
       borrow(){
         this.dialogFormVisible = false;
+      },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
       }
     }
   }

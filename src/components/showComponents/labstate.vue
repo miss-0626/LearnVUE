@@ -9,14 +9,9 @@
     </el-select>
     <el-button style="margin-left: 50px"  @click="handlefind(data,time)">空实验室查询</el-button>
     </el-row>
-  <el-table ref="filterTable" :data="tableData3" style="width: 100%">
-    <el-table-column prop="name" label="实验室名称" ></el-table-column>
-    <el-table-column prop="institute" label="归属学院" sortable  column-key="date"
-                     :filters="[{text: '物理与电信工程学院', value: '物理与电信工程学院'},
-                   {text: '信息光电子科技学院', value: '信息光电子科技学院'},
-                   {text: '化学与环境学院', value: '化学与环境学院'},
-                   {text: '华南先进光电子研究院', value: '华南先进光电子研究院'}]" :filter-method="filterHandler">
-    </el-table-column>
+  <el-table ref="filterTable" :data="tableData3.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.labNum.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
+    <el-table-column prop="labNum" label="实验室编号" sortable ></el-table-column>
+    <el-table-column prop="labName" label="实验室名称" ></el-table-column>
     <el-table-column prop="state" label="状态"
                      :filters="[{ text: '占用', value: '占用' }, { text: '空闲', value: '空闲' }]"
       :filter-method="filterTag" filter-placement="bottom-end">
@@ -30,26 +25,45 @@
       <el-button size="mini" @click="handleuse(scope.$index, scope.row)">申请借用</el-button>
     </template>
     </el-table-column>
+    <el-table-column align="right" width="220">
+      <template slot="header" slot-scope="scope">
+        <el-input v-model="search" size="mini" placeholder="输入实验室编号搜索">
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+      </template>
+    </el-table-column>
   </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData3.length">
+    </el-pagination>
 
     <el-dialog :title="实验室借用申请" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="借用人学号" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="借用人学号" :label-width="formLabelWidth" prop="number">
           <el-input v-model="form.number" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="实验室名称" :label-width="formLabelWidth">
-          <el-input v-model="form.labname" auto-complete="off"></el-input>
+        <el-form-item label="实验室编号" :label-width="formLabelWidth" prop="labNum">
+          <el-input v-model="form.labNum" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="描述用途" :label-width="formLabelWidth">
+        <el-form-item label="实验室名称" :label-width="formLabelWidth" prop="labName">
+          <el-input v-model="form.labName" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="描述用途" :label-width="formLabelWidth" prop="use">
           <el-input type="textarea" v-model="form.use" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="借用日期" :label-width="formLabelWidth">
+        <el-form-item label="借用日期" :label-width="formLabelWidth" prop="data">
           <el-date-picker  v-model="data" type="date" placeholder="选择借用日期"></el-date-picker>
         </el-form-item>
-        <el-form-item label="借用时间" :label-width="formLabelWidth">
+        <el-form-item label="借用时间" :label-width="formLabelWidth" prop="time">
           <el-select v-model="time" placeholder="选择借用时间">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
@@ -70,6 +84,8 @@
         name: "labstate",
       data() {
         return {
+          currentPage:1,
+          pagesize:5,
           data:'',
           time:'',
           options: [{
@@ -104,35 +120,54 @@
             label: '整天'
         }],
           tableData3: [{
-            name: '物理实验室',
-            institute:'物理与电信工程学院',
+            labId:'1',
+            labNum:'6-210',
+            labName: '物理实验室',
             state: '空闲'
           },{
-            name: '物理实验室',
-            institute:'物理与电信工程学院',
-            state: '空闲'
-          },{
-            name: '物理实验室',
-            institute:'化学与环境学院',
+            labId:'1',
+            labNum:'6-212',
+            labName: '硬件实验室',
             state: '占用'
           },{
-            name: '物理实验室',
-            institute:'物理与电信工程学院',
-            state: '空闲'
-          },{
-            name: '物理实验室',
-            institute:'化学与环境学院',
+            labId:'1',
+            labNum:'8-207',
+            labName: '电子实验室',
             state: '占用'
           },{
-            name: '物理实验室',
-            institute:'物理与电信工程学院',
+            labId:'1',
+            labNum:'8-314',
+            labName: '电子实验室',
+            state: '空闲'
+          },{
+            labId:'1',
+            labNum:'8-512',
+            labName: '光学实验室',
+            state: '空闲'
+          },{
+            labId:'1',
+            labNum:'6-312',
+            labName: '硬件实验室',
+            state: '空闲'
+          },{
+            labId:'1',
+            labNum:'8-501',
+            labName: '光学实验室',
             state: '空闲'
           }],
           dialogFormVisible: false,
           formLabelWidth: '100px',
           form: {},
           currentIndex: '',
-        }
+          search:'',
+          rules: {
+            number:   [{required: true, message: '请输入学号', trigger: 'blur'}],
+            name:     [{required: true, message: '请输入姓名', trigger: 'blur'}],
+            labNum :  [{required: true, message: '请输入借用实验室编号', trigger: 'blur'}],
+            labName : [{required: true, message: '请输入借用实验室名称', trigger: 'blur'}],
+            use:      [{required: true, message: '请描述用途', trigger: 'blur'}]
+          }
+        };
       },
       methods: {
         clearFilter() {
@@ -164,6 +199,14 @@
         },
         borrow(){
           this.dialogFormVisible = false;
+        },
+        handleSizeChange: function (size) {
+          this.pagesize = size;
+          console.log(this.pagesize);
+        },
+        handleCurrentChange: function(currentPage){
+          this.currentPage = currentPage;
+          console.log(this.currentPage);
         }
       }
     }

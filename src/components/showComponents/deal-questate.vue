@@ -5,7 +5,7 @@
         <span>设备管理</span>
       </el-col>
     </el-row>
-    <el-table :data="tableData10" height="450"  border style="width: 100%">
+    <el-table :data="tableData20.slice((currentPage-1)*pagesize,currentPage*pagesize)" height="450"  border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="lab-table-expand">
@@ -15,8 +15,8 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="quename" label="设备名称" ></el-table-column>
-      <el-table-column sortable prop="quenumber" label="设备编号" ></el-table-column>
+      <el-table-column sortable prop="equiNum" label="设备编号" ></el-table-column>
+      <el-table-column sortable prop="equiName" label="设备名称" ></el-table-column>
       <el-table-column label="申请学生信息">
         <el-table-column sortable prop="number" label="学号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
@@ -38,6 +38,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData20.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -46,9 +55,11 @@
     name: "deal-questate",
     data() {
       return {
-        tableData10: [{
-          quename: '示波器',
-          quenumber:'100-01',
+        currentPage:1,
+        pagesize:5,
+        tableData20: [{
+          equiNum:'100-01',
+          equiName: '示波器',
           number: '20153100001',
           name: '小明',
           msg: '展开查看',
@@ -58,8 +69,8 @@
           use: '用于做课程设计'
         },
           {
-            quename: '示波器',
-            quenumber:'100-01',
+            equiNum:'100-01',
+            equiName: '示波器',
             number: '20153100001',
             name: '小明',
             msg: '展开查看',
@@ -67,10 +78,9 @@
             time: '整天',
             state: '待处理',
             use: '用于做课程设计'
-          },
-          {
-            quename: '示波器',
-            quenumber:'100-01',
+          },{
+            equiNum:'100-01',
+            equiName: '示波器',
             number: '20153100001',
             name: '小明',
             msg: '展开查看',
@@ -78,10 +88,9 @@
             time: '整天',
             state: '待处理',
             use: '用于做课程设计'
-          },
-          {
-            quename: '示波器',
-            quenumber:'100-01',
+          },{
+            equiNum:'100-01',
+            equiName: '示波器',
             number: '20153100001',
             name: '小明',
             msg: '展开查看',
@@ -89,10 +98,9 @@
             time: '整天',
             state: '待处理',
             use: '用于做课程设计'
-          },
-          {
-            quename: '示波器',
-            quenumber:'100-01',
+          },{
+            equiNum:'100-01',
+            equiName: '示波器',
             number: '20153100001',
             name: '小明',
             msg: '展开查看',
@@ -100,12 +108,30 @@
             time: '整天',
             state: '待处理',
             use: '用于做课程设计'
-          }],
+          },{
+            equiNum:'100-01',
+            equiName: '示波器',
+            number: '20153100001',
+            name: '小明',
+            msg: '展开查看',
+            data: '2019-03-01',
+            time: '整天',
+            state: '待处理',
+            use: '用于做课程设计'
+          },],
         form: {},
         currentIndex: ''
       };
     },
     methods: {
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       handlepass(index, row) {
         var that = this;
         this.$confirm('确认允许该学生的申请吗?', '提示', {
@@ -143,7 +169,7 @@
             message: '放弃拒绝.'
           });
         });
-      },
+      }
     }
   }
 </script>

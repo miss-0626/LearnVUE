@@ -8,10 +8,10 @@ import Home from '../components/Home'
 import show from '../components/show'
 import showmsg from '../components/showmsg'
 import foot from '../components/foot'
+import study from '../components/showComponents/study'
 import labshow from '../components/showComponents/labshow'
 import labstate from '../components/showComponents/labstate'
 import queshow from '../components/showComponents/queshow'
-import quenumber from '../components/showComponents/quenumber'
 import questate from '../components/showComponents/questate'
 import queservice from '../components/showComponents/queservice'
 import teachcourse from '../components/showComponents/teachcourse'
@@ -26,15 +26,21 @@ import preport from '../components/showComponents/preport'
 import readreport from '../components/showComponents/read-report'
 import deallabshow from '../components/showComponents/deal-labshow'
 import dealqueshow from '../components/showComponents/deal-queshow'
-import dealquenumber from '../components/showComponents/deal-quenumber'
 import deallabstate from '../components/showComponents/deal-labstate'
 import dealquestate from '../components/showComponents/deal-questate'
 import dealqueservice from '../components/showComponents/deal-queservice'
 import dealcourse from '../components/showComponents/deal-course'
 import dealproject from '../components/showComponents/deal-project'
 import dealteacher from '../components/showComponents/deal-teacher'
+import dealmessage from '../components/showComponents/deal-message'
 import addproject from '../components/showComponents/add-project'
 import addscore from '../components/showComponents/add-score'
+import labdetail from '../components/showComponents/lab-detail'
+import quedetail from '../components/showComponents/que-detail'
+import coursedetail from '../components/showComponents/course-detail'
+import teacherdetail from '../components/showComponents/teacher-detail'
+import password from '../components/showComponents/password'
+import plabque from '../components/showComponents/p-lab-que'
 
 Vue.use(Router);
 
@@ -55,6 +61,26 @@ export default new Router({
       name: 'showmsg',
       component: showmsg
     },
+ /*   {
+      path: '/lab-detail',
+      name: 'lab-detail',
+      component: labdetail
+    },
+    {
+      path: '/que-detail',
+      name: 'que-detail',
+      component: quedetail
+    },
+    {
+      path: '/course-detail',
+      name: 'course-detail',
+      component: coursedetail
+    },
+    {
+      path: '/teacher-detail',
+      name: 'teacher-detail',
+      component: teacherdetail
+    },*/
     {
       path: '/foot',
       name: 'foot',
@@ -88,6 +114,11 @@ export default new Router({
       component: Student,
       children:[
         {
+          path: '/Studentstudy',
+          name: 'Studentstudy',
+          component: study
+        },
+        {
           path: '/StudentHome',
           name: 'StudentHome',
           component: Home
@@ -106,11 +137,6 @@ export default new Router({
           path:'/Studentqueshow',
           name:'Studentqueshow',
           component:queshow
-        },
-        {
-          path:'/Studentquenumber',
-          name:'Studentquenumber',
-          component:quenumber
         },
         {
           path:'/Studentquestate',
@@ -153,9 +179,19 @@ export default new Router({
           component:pmessage
         },
         {
+          path:'/Studentpassword',
+          name:'Studentpasswrod',
+          component:password
+        },
+        {
           path:'/Studentpscore',
           name:'Studentpscore',
           component:pscore
+        },
+        {
+          path:'/p-lab-que',
+          name:'p-lab-que',
+          component:plabque
         },
         {
           path:'/Studentpproject',
@@ -166,6 +202,26 @@ export default new Router({
           path:'/Studentpreport',
           name:'Studentpreport',
           component:preport
+        },
+        {
+          path: '/lab-detail',
+          name: 'lab-detail',
+          component: labdetail
+        },
+        {
+          path: '/que-detail',
+          name: 'que-detail',
+          component: quedetail
+        },
+        {
+          path: '/course-detail',
+          name: 'course-detail',
+          component: coursedetail
+        },
+        {
+          path: '/teacher-detail',
+          name: 'teacher-detail',
+          component: teacherdetail
         }]
     },
 
@@ -175,6 +231,11 @@ export default new Router({
       name: 'Teacher',
       component: Teacher,
       children:[
+        {
+          path: '/Teacherstudy',
+          name: 'Teacherstudy',
+          component: study
+        },
         {
           path: '/TeacherHome',
           name: 'TeacherHome',
@@ -194,11 +255,6 @@ export default new Router({
           path:'/Teacherqueshow',
           name:'Teacherqueshow',
           component:queshow
-        },
-        {
-          path:'/Teacherquenumber',
-          name:'Teacherquenumber',
-          component:quenumber
         },
         {
           path:'/Teacherquestate',
@@ -247,6 +303,11 @@ export default new Router({
           component:pmessage
         },
         {
+          path:'/Teacherpassword',
+          name:'Teacherpassword',
+          component:password
+        },
+        {
           path:'/add-score',
           name:'add-score',
           component:addscore
@@ -255,7 +316,27 @@ export default new Router({
           path:'/read-report',
           name:'read-report',
           component:readreport
-        }]
+        },
+        {
+          path: '/lab-detail',
+          name: 'lab-detail',
+          component: labdetail
+        },
+        {
+          path: '/que-detail',
+          name: 'que-detail',
+          component: quedetail
+        },
+        {
+          path: '/course-detail',
+          name: 'course-detail',
+          component: coursedetail
+        },
+        {
+          path: '/teacher-detail',
+          name: 'teacher-detail',
+          component: teacherdetail
+        },]
     },
 
 
@@ -264,6 +345,11 @@ export default new Router({
       name: 'Manager',
       component: Manager,
       children:[
+        {
+          path: '/Managerstudy',
+          name: 'Managerstudy',
+          component: study
+        },
         {
           path: '/ManagerHome',
           name: 'ManagerHome',
@@ -283,11 +369,6 @@ export default new Router({
           path:'/deal-queshow',
           name:'deal-queshow',
           component:dealqueshow
-        },
-        {
-          path:'/deal-quenumber',
-          name:'deal-quenumber',
-          component:dealquenumber
         },
         {
           path:'/deal-questate',
@@ -325,16 +406,45 @@ export default new Router({
           component:dealteacher
         },
         {
+          path:'/deal-message',
+          name:'deal-message',
+          component:dealmessage
+        },
+        {
           path:'/Managerpmessage',
           name:'Managerpmessage',
           component:pmessage
         },
         {
+          path:'/Managerpassword',
+          name:'Managerpassword',
+          component:password
+        },
+        {
           path:'/Managerscore',
           name:'Managerscore',
           component:addscore
-        }
-      ]
+        },
+        {
+          path: '/lab-detail',
+          name: 'lab-detail',
+          component: labdetail
+        },
+        {
+          path: '/que-detail',
+          name: 'que-detail',
+          component: quedetail
+        },
+        {
+          path: '/course-detail',
+          name: 'course-detail',
+          component: coursedetail
+        },
+        {
+          path: '/teacher-detail',
+          name: 'teacher-detail',
+          component: teacherdetail
+        }]
     }
   ]
 })

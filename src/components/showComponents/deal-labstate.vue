@@ -5,7 +5,7 @@
         <span >实验室管理</span>
       </el-col>
     </el-row>
-    <el-table :data="tableData10" height="450"  border style="width: 100%">
+    <el-table :data="tableData17.slice((currentPage-1)*pagesize,currentPage*pagesize)" height="450"  border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="lab-table-expand">
@@ -15,7 +15,8 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column sortable prop="labname" label="实验室名称" ></el-table-column>
+      <el-table-column sortable prop="labNum" label="实验室编号" ></el-table-column>
+      <el-table-column sortable prop="labName" label="实验室名称" ></el-table-column>
       <el-table-column label="申请学生信息">
         <el-table-column sortable prop="number" label="学号"></el-table-column>
         <el-table-column prop="name" label="姓名"></el-table-column>
@@ -30,13 +31,22 @@
           <el-tag v-else="scope.row.state==='待处理'">{{scope.row.state}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handlepass(scope.$index, scope.row)">允许</el-button>
           <el-button size="small" type="danger" @click="handlenot(scope.$index, scope.row)">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData17.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -45,8 +55,11 @@
         name: "deal-labstate",
       data() {
         return {
-          tableData10: [{
-            labname: '物理实验室',
+          currentPage:1,
+          pagesize:5,
+          tableData17: [{
+            labNum:'8-213',
+            labName: '硬件实验室',
             number: '20153100001',
             name: '小明',
             msg: '展开查看',
@@ -56,38 +69,49 @@
             use: '用于做课程设计'
           },
             {
-              labname: '物理实验室',
-              number: '20153100001',
+              labNum:'6-202',
+              labName: '物理实验室',
+              number: '20153100034',
+              name: '小黄',
+              msg: '展开查看',
+              data: '2019-03-01',
+              time: '整天',
+              state: '待处理',
+              use: '用于做课程设计'
+            },{
+              labNum:'6-230',
+              labName: '电子实验室',
+              number: '20153100051',
+              name: '小红',
+              msg: '展开查看',
+              data: '2019-03-01',
+              time: '整天',
+              state: '待处理',
+              use: '用于做课程设计'
+            },{
+              labNum:'8-210',
+              labName: '光学实验室',
+              number: '20153100121',
               name: '小明',
               msg: '展开查看',
               data: '2019-03-01',
               time: '整天',
               state: '待处理',
               use: '用于做课程设计'
-            },
-            {
-              labname: '物理实验室',
-              number: '20153100001',
+            },{
+              labNum:'8-203',
+              labName: '物理实验室',
+              number: '20153100005',
               name: '小明',
               msg: '展开查看',
               data: '2019-03-01',
               time: '整天',
               state: '待处理',
               use: '用于做课程设计'
-            },
-            {
-              labname: '物理实验室',
-              number: '20153100001',
-              name: '小明',
-              msg: '展开查看',
-              data: '2019-03-01',
-              time: '整天',
-              state: '待处理',
-              use: '用于做课程设计'
-            },
-            {
-              labname: '物理实验室',
-              number: '20153100001',
+            },{
+              labNum:'8-205',
+              labName: '物理实验室',
+              number: '20153100011',
               name: '小明',
               msg: '展开查看',
               data: '2019-03-01',
@@ -100,6 +124,14 @@
         };
       },
       methods: {
+        handleSizeChange: function (size) {
+          this.pagesize = size;
+          console.log(this.pagesize);
+        },
+        handleCurrentChange: function(currentPage){
+          this.currentPage = currentPage;
+          console.log(this.currentPage);
+        },
         handlepass(index, row) {
           var that = this;
           this.$confirm('确认允许该学生的申请吗?', '提示', {

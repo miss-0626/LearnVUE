@@ -1,7 +1,7 @@
 <template>
   <div class="Teacher">
     <div class="wrapper">
-    <show></show>
+      <show @transferUser="getUser"></show>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router style=";box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
       <el-menu-item index="TeacherHome">首页</el-menu-item>
       <el-submenu index="2">
@@ -12,7 +12,6 @@
       <el-submenu index="3">
         <template slot="title">设备介绍</template>
         <el-menu-item index="Teacherqueshow">基本信息</el-menu-item>
-        <el-menu-item index="Teacherquenumber">所属实验室及编号</el-menu-item>
         <el-menu-item index="Teacherquestate">状态和预约</el-menu-item>
         <el-menu-item index="Teacherqueservice">维修申报</el-menu-item>
       </el-submenu>
@@ -30,10 +29,12 @@
       <el-submenu index="5">
         <template slot="title">信息查询与维护</template>
         <el-menu-item index="Teacherpmessage">个人信息</el-menu-item>
+        <el-menu-item index="Teacherpassword">修改密码</el-menu-item>
         <el-menu-item index="add-score">上传成绩</el-menu-item>
         <el-menu-item index="add-project">项目上传与审核</el-menu-item>
         <el-menu-item index="read-report">批改实验报告</el-menu-item>
       </el-submenu>
+      <el-menu-item index="Teacherstudy">学习探讨区</el-menu-item>
     </el-menu>
 
     <router-view/>
@@ -55,10 +56,14 @@
     data() {
       return {
         activeIndex: 'TeacherHome',
-        activeIndex2: '1'
+        activeIndex2: '1',
+        username:''
       };
     },
     methods: {
+      getUser (msg) {
+        this.username = msg;
+      },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       }

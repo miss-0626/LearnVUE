@@ -4,14 +4,27 @@
     <el-button @click="clearFilter">清除筛选</el-button>
       <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增设备</el-button>
     </el-row>
-    <el-table ref="filterTable" :data="tableData2" style="width: 100%">
-      <el-table-column prop="quename" label="设备名称" width="150" column-key="date"
-                       :filters="[{text: '示波器', value: '示波器'},
-                                  {text: '高频信号发生器', value: '高频信号发生器'},
-                                  {text: '频谱仪', value: '频谱仪'},
-                                  {text: '计算机', value: '计算机'}]" :filter-method="filterHandler">
+    <el-table ref="filterTable" :data="tableData18.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
+      <el-table-column label="设备图片" prop="img" width="200">
+        <template slot-scope="props">
+          <el-popover placement="right" title="" trigger="click">
+            <img :src="props.row.img" style="max-width:300px;max-height:300px"/>
+            <img slot="reference" :src="props.row.img" :alt="props.row.img" style="width:100px;height:100px" class="image">
+          </el-popover>
+        </template>
       </el-table-column>
-      <el-table-column prop="introduce" label="设备基本信息及用途"></el-table-column>
+      <el-table-column prop="equiNum" label="设备编号" width="150"></el-table-column>
+      <el-table-column prop="equiName" label="设备名称" width="150"></el-table-column>
+      <el-table-column prop="labNum" label="所属实验室"></el-table-column>
+      <el-table-column prop="state" label="状态"
+                       :filters="[{ text: '占用', value: '占用' },
+                                  { text: '空闲', value: '空闲' }]"
+                       :filter-method="filterTag" filter-placement="bottom-end">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.state === '占用' ? '空闲' : 'success'"
+                  disable-transitions>{{scope.row.state}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
@@ -20,15 +33,37 @@
           </el-button>
         </template>
       </el-table-column>
+      <el-table-column align="right" width="230">
+        <template slot="header" slot-scope="scope">
+          <el-input v-model="search" size="mini" placeholder="输入教学课程搜索">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
+        </template>
+      </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData18.length">
+    </el-pagination>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="设备名称" :label-width="formLabelWidth">
-          <el-input v-model="form.quename" auto-complete="off"></el-input>
+          <el-input v-model="form.equiNum" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备基本信息及用途" :label-width="formLabelWidth">
-          <el-input  type="textarea" v-model="form.introduce" auto-complete="off"></el-input>
+        <el-form-item label="设备名称" :label-width="formLabelWidth">
+          <el-input v-model="form.equiName" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所属实验室" :label-width="formLabelWidth">
+          <el-input  v-model="form.labNum" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" :label-width="formLabelWidth">
+          <el-input  v-model="form.state" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -48,30 +83,60 @@
     name: "deal-queshow",
     data() {
       return {
-        tableData2: [{
-          quename:'示波器',
-          introduce: '这是一条示波器介绍'
-        },
+        currentPage:1,
+        pagesize:5,
+        tableData18: [
           {
-            quename:'计算机',
-            introduce: '这是一条计算机介绍'
-          },
-          {
-            quename:'高频信号发生器',
-            introduce: '这是一条高频信号发生器介绍'
-          },
-          {
-            quename:'高频信号发生器',
-            introduce: '这是一条高频信号发生器介绍'
-          },
-          {
-            quename:'频谱仪',
-            introduce: '这是一条频谱仪介绍'
-          },
-          {
-            quename:'频谱仪',
-            introduce: '这是一条频谱仪介绍'
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
+          },{
+            img: '../static/image/示波器.jpg',
+            equiId:'1',
+            equiNum:'1-101',
+            equiName:'示波器',
+            labNum:'8-520',
+            state:'空闲'
           }],
+        search:'',
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},
@@ -91,6 +156,14 @@
         const property = column['property'];
         return row[property] === value;
       },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       add() {
         this.dialogStatus = "update";
         this.form = {
@@ -101,7 +174,7 @@
       },
       update() {
         this.form.date = reformat(this.form.date);
-        this.tableData2.push(this.form);
+        this.tableData18.push(this.form);
         this.dialogFormVisible = false;
       },
       editdate() {
@@ -112,7 +185,7 @@
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
-        this.form = this.tableData2[index];
+        this.form = this.tableData18[index];
         this.currentIndex = index;
         this.dialogFormVisible = true;
       },
@@ -122,7 +195,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData2.splice(index, 1);
+          this.tableData18.splice(index, 1);
           this.$message({
             type: 'success',
             message: '删除成功!'

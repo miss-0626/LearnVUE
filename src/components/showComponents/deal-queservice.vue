@@ -5,7 +5,7 @@
         <span>设备维护管理</span>
       </el-col>
     </el-row>
-    <el-table :data="tableData11" height="450"  border style="width: 100%">
+    <el-table :data="tableData21.slice((currentPage-1)*pagesize,currentPage*pagesize)" height="450"  border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="lab-table-expand">
@@ -32,6 +32,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData21.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -40,7 +49,9 @@
     name: "deal-queservice",
     data() {
       return {
-        tableData11: [{
+        currentPage:1,
+        pagesize:5,
+        tableData21: [{
           quename: '示波器',
           quenumber:'100-01',
           problem: '无法启动',
@@ -74,12 +85,34 @@
             problem: '无法启动',
             state: '待处理',
             msg: '展开查看'
+          },
+          {
+            quename: '示波器',
+            quenumber:'100-01',
+            problem: '无法启动',
+            state: '待处理',
+            msg: '展开查看'
+          },
+          {
+            quename: '示波器',
+            quenumber:'100-01',
+            problem: '无法启动',
+            state: '待处理',
+            msg: '展开查看'
           }],
         form: {},
         currentIndex: ''
       };
     },
     methods: {
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       handlepass(index, row) {
         var that = this;
         this.$confirm('确认该设备已能正常使用吗?', '提示', {

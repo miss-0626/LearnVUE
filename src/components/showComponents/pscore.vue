@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
-    <el-table ref="filterTable" :data="tableData2" style="width: 100%">
+    <el-table ref="filterTable" :data="tableData11.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
       <el-table-column prop="year" label="学年"sortable  column-key="date"
                        :filters="[{text: '2018-2019', value: '2018-2019'},
                                   {text: '2017-2018', value: '2017-2018'},
@@ -21,6 +21,15 @@
                    {text: '华南先进光电子研究院', value: '华南先进光电子研究院'}]" :filter-method="filterHandler">
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData11.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -29,7 +38,9 @@
         name: "pscore",
       data() {
         return {
-          tableData2: [{
+          currentPage:1,
+          pagesize:5,
+          tableData11: [{
             year:'2018-2019',
             term:'1',
             name:'通信技术',
@@ -81,6 +92,14 @@
         filterHandler(value, row, column) {
           const property = column['property'];
           return row[property] === value;
+        },
+        handleSizeChange: function (size) {
+          this.pagesize = size;
+          console.log(this.pagesize);
+        },
+        handleCurrentChange: function(currentPage){
+          this.currentPage = currentPage;
+          console.log(this.currentPage);
         }
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
-    <el-table :data="tableData2" border style="width: 100%">
+    <el-table :data="tableData23.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="project-table-expand">
@@ -31,6 +31,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData23.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -39,7 +48,9 @@
     name: "deal-project",
     data() {
       return {
-        tableData2: [{
+        currentPage:1,
+        pagesize:5,
+        tableData23: [{
           name:'挑战杯',
           teacher:'崔老师',
           institute:'物理与电信工程学院',
@@ -90,13 +101,21 @@
         const property = column['property'];
         return row[property] === value;
       },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       handleDelete(index, row) {
         this.$confirm('此操作将永久删除该条信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData2.splice(index, 1);
+          this.tableData23.splice(index, 1);
         this.$message({
           type: 'success',
           message: '删除成功!'

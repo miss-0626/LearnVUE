@@ -1,6 +1,6 @@
 <template>
   <div style=";margin:50px 400px 0px 400px;">
-    <el-table :data="tableData7" border style="width: 100%">
+    <el-table :data="tableData10.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
       <el-table-column prop="experiment" label="实验名称" ></el-table-column>
       <el-table-column prop="book" label="指导书" ></el-table-column>
       <el-table-column label="操作">
@@ -9,6 +9,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData10.length">
+    </el-pagination>
   </div>
 </template>
 
@@ -17,7 +26,9 @@
     name: "teachbook",
     data() {
       return {
-        tableData7: [{
+        currentPage:1,
+        pagesize:5,
+        tableData10: [{
           experiment: '现代通信网',
           book: '实验指导书'
         },
@@ -31,6 +42,14 @@
         methods: {
           download:{
 
+          },
+          handleSizeChange: function (size) {
+            this.pagesize = size;
+            console.log(this.pagesize);
+          },
+          handleCurrentChange: function(currentPage){
+            this.currentPage = currentPage;
+            console.log(this.currentPage);
           }
         }
       }

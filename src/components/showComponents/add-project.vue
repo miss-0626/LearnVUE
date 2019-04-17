@@ -6,7 +6,7 @@
   <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增项目</el-button>
   </el-col>
   </el-row>
-  <el-table :data="tableData9" height="450"  border style="width: 100%">
+  <el-table :data="tableData14.slice((currentPage-1)*pagesize,currentPage*pagesize)" height="450"  border style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="project-table-expand">
@@ -36,6 +36,15 @@
       </template>
     </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData14.length">
+    </el-pagination>
 
     <el-dialog :title="新增项目" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -73,7 +82,9 @@
       name: "add-project",
       data() {
         return {
-          tableData9: [{
+          currentPage:1,
+          pagesize:5,
+          tableData14: [{
             project: '蓝桥杯',
             number: '20153100001',
             name: '小明',
@@ -136,6 +147,14 @@
         };
       },
       methods: {
+        handleSizeChange: function (size) {
+          this.pagesize = size;
+          console.log(this.pagesize);
+        },
+        handleCurrentChange: function(currentPage){
+          this.currentPage = currentPage;
+          console.log(this.currentPage);
+        },
         add() {
           this.form = {
             project: '',
@@ -185,7 +204,7 @@
         },
         upproject() {
           this.form.date = reformat(this.form.date);
-          this.tableData9.push(this.form);
+          this.tableData14.push(this.form);
           this.dialogFormVisible = false;
         },
         cancel(){
@@ -204,14 +223,14 @@
     margin: 0;
     padding: 5px 15px;
   }
-  .teacher-table-expand {
+  .project-table-expand {
     font-size: 0
   }
   .labelColor .el-form-item__label{
     width: 90px;
     color: #99a9bf
   }
-  .teacher-table-expand .el-form-item {
+  .project-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;
     width: 100%

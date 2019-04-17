@@ -4,7 +4,7 @@
     <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
     <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增课程信息</el-button>
     </el-row>
-    <el-table :data="tableData2.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
+    <el-table :data="tableData22.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="course-table-expand">
@@ -37,10 +37,21 @@
       </el-table-column>
       <el-table-column align="right">
         <template slot="header" slot-scope="scope">
-          <el-input v-model="search" size="mini" placeholder="输入教学课程搜索"/>
+          <el-input v-model="search" size="mini" placeholder="输入教学课程搜索">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData22.length">
+    </el-pagination>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -86,7 +97,9 @@
     name: "deal-course",
     data() {
       return {
-        tableData2: [{
+        currentPage:1,
+        pagesize:5,
+        tableData22: [{
           name:'通信技术',
           teacher:'崔老师',
           institute:'物理与电信工程学院',
@@ -143,6 +156,14 @@
         const property = column['property'];
         return row[property] === value;
       },
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       add() {
         this.dialogStatus = "update";
         this.form = {
@@ -156,7 +177,7 @@
       },
       update() {
         this.form.date = reformat(this.form.date);
-        this.tableData2.push(this.form);
+        this.tableData22.push(this.form);
         this.dialogFormVisible = false;
       },
       editdate() {
@@ -167,7 +188,7 @@
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
-        this.form = this.tableData2[index];
+        this.form = this.tableData22[index];
         this.currentIndex = index;
         this.dialogFormVisible = true;
       },
@@ -177,7 +198,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData2.splice(index, 1);
+          this.tableData22.splice(index, 1);
           this.$message({
             type: 'success',
             message: '删除成功!'

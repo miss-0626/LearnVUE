@@ -7,7 +7,7 @@
           <img src="../assets/word.png">
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
-        <span style="margin-right: 15px">欢迎 {{name}}</span>
+        <span style="margin-right: 15px;font-weight:bold">欢迎 {{username}}</span>
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
@@ -26,17 +26,19 @@
         name: "show",
       data(){
           return{
-            name:''
+            username:''
           }
       },
       mounted(){
         /*页面挂载获取保存的cookie值，渲染到页面上*/
         let uname = getCookie('username');
-        this.name = uname;
+        this.username = uname;
+        this.$emit('transferUser',this.username);
         /*如果cookie不存在，则跳转到登录页*/
         if(uname === ""){
           this.$router.push({path: '/Login'})
         }
+
       },
       methods:{
         loginout(){
@@ -60,7 +62,7 @@
 
 <style scoped>
   .el-header {
-    background-color: #5F9F9F;
+    background-color: #2D8AB8;
     color: #333;
     line-height: 60px;
   }

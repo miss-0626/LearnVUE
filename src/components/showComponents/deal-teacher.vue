@@ -3,7 +3,7 @@
     <el-row style="margin-top: 5px">
       <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增导师</el-button>
     </el-row>
-    <el-table :data="tableData5" style="width: 100%">
+    <el-table :data="tableData24.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="teacher-table-expand">
@@ -27,7 +27,10 @@
       </el-table-column>
       <el-table-column label="肖像" prop="img">
         <template slot-scope="props">
-          <img :src="props.row.img" alt="" style="width:50px;height:50px"  class="img"/>
+          <el-popover placement="right" title="" trigger="click">
+            <img :src="props.row.img" style="max-width:300px;max-height:300px"/>
+            <img slot="reference" :src="props.row.img" :alt="props.row.img" style="width:100px;height:100px" class="image">
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column label="导师" prop="name"></el-table-column>
@@ -42,6 +45,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination style="padding-left: 30px;margin-top: 5px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[5, 10, 20, 40]"
+                   :page-size="pagesize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="tableData24.length">
+    </el-pagination>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -90,8 +102,10 @@
     name: "dea-teacher",
     data() {
       return {
+        currentPage:1,
+        pagesize:5,
         imgList: [{ url: '../static/image/tzl.png'}],
-        tableData5: [{
+        tableData24: [{
           img: '../static/image/tzl.png',
           name: '唐志列',
           sex: '男',
@@ -137,6 +151,14 @@
       }
     },
     methods: {
+      handleSizeChange: function (size) {
+        this.pagesize = size;
+        console.log(this.pagesize);
+      },
+      handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        console.log(this.currentPage);
+      },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -158,7 +180,7 @@
       },
       update() {
         this.form.date = reformat(this.form.date);
-        this.tableData5.push(this.form);
+        this.tableData24.push(this.form);
         this.dialogFormVisible = false;
       },
       editdate(){
@@ -169,7 +191,7 @@
       },
       handleEdit(index, row) {
         this.dialogStatus = "editdate";
-        this.form = this.tableData5[index];
+        this.form = this.tableData24[index];
         this.currentIndex = index;
         this.dialogFormVisible = true;
       },
@@ -179,7 +201,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData5.splice(index, 1);
+          this.tableData24.splice(index, 1);
           this.$message({
             type: 'success',
             message: '删除成功!'
