@@ -73,19 +73,32 @@
       </el-main>
     </el-container>
 
-    <div class="projects">
-      <h2 style="padding: 5px 15px;margin-top: 5px">科研项目</h2>
+    <div class="projects" >
+      <h2 style="padding: 5px 15px;margin-top: 5px">最新推荐</h2>
       <ul>
-        <li v-for="item in projectList"> <img :src="item.imgSrc" /> </li>
+        <li v-for="item in projectList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+          <router-link :to="{ name:item.url, query:{Id:item.Id}}">
+          <span><img :src="item.imgSrc" /></span>
+          <p style="font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
+          <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
+          </router-link>
+        </li>
       </ul>
     </div>
 
-     <div class="teachers">
-       <h2 style="padding: 5px 15px;margin-top: 5px">优秀教师</h2>
-       <ul>
-         <li v-for="item in teacherList"> <img :src="item.imgSrc" /> </li>
-       </ul>
-     </div>
+    <div class="teachers" >
+      <h2 style="padding: 5px 15px;margin-top: 5px">优秀教师</h2>
+      <ul>
+        <li v-for="item in teacherList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+          <router-link :to="{ name:item.url, query:{Id:item.Id}}">
+            <span><img :src="item.imgSrc" /></span>
+            <p style="text-align: center; font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
+            <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+
   </div>
 </template>
 
@@ -109,18 +122,18 @@ export default {
       msg: '通知与展示',
       role:'',
       projectList :[
-        {'imgSrc':'../static/image/5.jpg'},
-        {'imgSrc':'../static/image/5.jpg'},
-        {'imgSrc':'../static/image/5.jpg'},
-        {'imgSrc':'../static/image/5.jpg'},
-        {'imgSrc':'../static/image/5.jpg'}
+        {'Id':'1',  'url':'lab-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
+        {'Id':'2',  'url':'que-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
+        {'Id':'3',  'url':'course-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
+        {'Id':'4',  'url':'teacher-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
+        {'Id':'5',  'url':'study',          'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'}
       ],
       teacherList :[
-        {'imgSrc':'../static/image/tzl.png'},
-        {'imgSrc':'../static/image/tzl.png'},
-        {'imgSrc':'../static/image/tzl.png'},
-        {'imgSrc':'../static/image/tzl.png'},
-        {'imgSrc':'../static/image/tzl.png'}
+        {'Id':'1',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
+        {'Id':'2',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
+        {'Id':'3',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
+        {'Id':'4',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
+        {'Id':'5',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'}
       ],
       tableData1: [{
         inform:'这是一条最新通知这是一条最新通知这是一条最新通知',
@@ -315,6 +328,7 @@ h2{
 }
 a {
   color: #42b983;
+  text-decoration: none;
 }
 *{
   box-sizing: border-box;
@@ -388,6 +402,7 @@ img{
 .teachers{
   width:100%;
   height:auto;
+  padding-bottom: 300px;
 }
 .teachers ul,.projects ul{
   margin:10px 30px;
@@ -401,10 +416,22 @@ img{
   margin:10px;
   display: block;
   float:left;
+  overflow: hidden;
 }
+.teachers ul li span,.projects ul li span{
+   width:230px;
+   height:auto;
+   display: block;
+   overflow: hidden;
+ }
 .teachers ul li img,.projects ul li img{
   width: 230px;
   height: 200px;
+  cursor: pointer;
+  transition: all 0.8s;
+}
+.teachers ul li img:hover,.projects ul li img:hover{
+  transform: scale(1.2);
 }
 
 </style>

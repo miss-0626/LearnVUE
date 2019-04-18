@@ -115,7 +115,7 @@ export default new Router({
       children:[
         {
           path: '/Studentstudy',
-          name: 'Studentstudy',
+          name: 'study',
           component: study
         },
         {
@@ -233,7 +233,7 @@ export default new Router({
       children:[
         {
           path: '/Teacherstudy',
-          name: 'Teacherstudy',
+          name: 'study',
           component: study
         },
         {

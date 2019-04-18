@@ -5,28 +5,12 @@
     <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增课程信息</el-button>
     </el-row>
     <el-table :data="tableData22.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="course-table-expand">
-            <el-form-item class="labelColor" label="详细介绍">
-              <span>{{ props.row.desc}}</span>
-            </el-form-item>
-          </el-form>
-        </template>
+      <el-table-column prop="courseName" label="教学课程" sortable></el-table-column>
+      <el-table-column prop="teacher" label="教学老师" sortable></el-table-column>
+      <el-table-column prop="type" label="类型" sortable  column-key="date"
+                       :filters="[{text: '必修', value: '必修'},
+                   {text: '选修', value: '选修'}]" :filter-method="filterHandler">
       </el-table-column>
-      <el-table-column prop="name" label="教学课程" ></el-table-column>
-      <el-table-column prop="teacher" label="教学老师"sortable  column-key="date"
-                       :filters="[{text: '崔老师', value: '崔老师'},
-                   {text: '张老师', value: '张老师'},
-                   {text: '邱老师', value: '邱老师'}]" :filter-method="filterHandler">
-      </el-table-column>
-      <el-table-column prop="institute" label="归属学院" sortable  column-key="date"
-                       :filters="[{text: '物理与电信工程学院', value: '物理与电信工程学院'},
-                   {text: '信息光电子科技学院', value: '信息光电子科技学院'},
-                   {text: '化学与环境学院', value: '化学与环境学院'},
-                   {text: '华南先进光电子研究院', value: '华南先进光电子研究院'}]" :filter-method="filterHandler">
-      </el-table-column>
-      <el-table-column prop="introduce" label="课程介绍" show-overflow-tooltip="true"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
@@ -56,28 +40,16 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="教学课程" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+          <el-input v-model="form.courseName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="教学老师" :label-width="formLabelWidth">
-          <el-select v-model="form.teacher" placeholder="教学老师">
-            <el-option label="崔老师" value="崔老师"></el-option>
-            <el-option label="张老师" value="张老师"></el-option>
-            <el-option label="邱老师" value="邱老师"></el-option>
+          <el-input v-model="form.teacher" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="类型" :label-width="formLabelWidth">
+          <el-select v-model="form.type" placeholder="课程类型">
+            <el-option label="必修" value="必修"></el-option>
+            <el-option label="选修" value="选修"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="归属学院" :label-width="formLabelWidth">
-          <el-select v-model="form.institute" placeholder="归属学院">
-            <el-option label="物理与电信工程学院" value="物理与电信工程学院"></el-option>
-            <el-option label="信息光电子科技学院" value="信息光电子科技学院"></el-option>
-            <el-option label="化学与环境学院" value="化学与环境学院"></el-option>
-            <el-option label="华南先进光电子研究院" value="华南先进光电子研究院"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="课程介绍" :label-width="formLabelWidth">
-          <el-input v-model="form.introduce" auto-complete="展开查看"></el-input>
-        </el-form-item>
-        <el-form-item label="详细介绍" :label-width="formLabelWidth">
-          <el-input  type="textarea" v-model="form.desc" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -100,42 +72,37 @@
         currentPage:1,
         pagesize:5,
         tableData22: [{
-          name:'通信技术',
+          courseId:'1',
+          courseName:'通信技术',
           teacher:'崔老师',
-          institute:'物理与电信工程学院',
-          introduce: '展开查看详情',
-          desc:'通信技术实验'
-        },{
-          name:'计算机基础',
-          teacher:'张老师',
-          institute:'信息光电子科技学院',
-          introduce: '通信技术实验'
-        },{
-          name:'通信技术',
-          teacher:'崔老师',
-          institute:'物理与电信工程学院',
-          introduce: '通信技术实验'
-        },{
-          name:'图像处理',
-          teacher:'邱老师',
-          institute:'华南先进光电子研究院',
-          introduce: '通信技术实验'
-        },{
-          name:'数字信号处理',
-          teacher:'张老师',
-          institute:'物理与电信工程学院',
-          introduce: '通信技术实验'
-        },{
-          name:'通信技术',
-          teacher:'邱老师',
-          institute:'物理与电信工程学院',
-          introduce: '通信技术实验'
-        },{
-          name:'通信技术',
-          teacher:'崔老师',
-          institute:'化学与环境学院',
-          introduce: '通信技术实验'
-        }],
+          type:'必修'
+        },
+          {
+            courseId:'12',
+            courseName:'图像处理',
+            teacher:'崔老师',
+            type:'必修'
+          },{
+            courseId:'13',
+            courseName:'通信技术',
+            teacher:'崔老师',
+            type:'必修'
+          },{
+            courseId:'17',
+            courseName:'通信技术',
+            teacher:'崔老师',
+            type:'必修'
+          },{
+            courseId:'14',
+            courseName:'计算机基础',
+            teacher:'崔老师',
+            type:'必修'
+          },{
+            courseId:'15',
+            courseName:'通信技术',
+            teacher:'崔老师',
+            type:'必修'
+          }],
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},

@@ -1,7 +1,7 @@
 <template>
     <div class="background">
       <el-row :span="24" class="background">
-      <div class="inform" style="border-style:inset;border-width:5px; background-color: white; margin:100px 180px 0px 180px;border:4px; border-radius: 4px;">
+      <div class="inform" style="border-style:inset; background-color: white; margin:100px 180px 0px 180px; border-radius: 4px;">
         <p style="text-align: center;color: royalblue;font-size: xx-large"> {{head}} </p>
         <p> <hr size="5px"/> </p>
         <p style="font-size: x-large;white-space:pre-wrap;margin: 0 35px;"> {{main}} </p>
