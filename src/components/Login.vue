@@ -241,7 +241,39 @@
     },
     methods: {
       login () {
-        this.$refs.loginForm.validate((valid) => {
+        if (this.user.name === '' || this.user.pass === '' ){
+          alert("请输入用户名或密码")
+        }else{
+         /* let data = {'userName':this.user.name,'password':this.user.pass,'role':this.user.role};*/
+        this.$axios({
+          method: 'post',
+          url: 'http://192.168.1.236:8080/exper_front/front/login',
+          data:{
+            userName:this.user.name,
+            password:this.user.pass,
+            role:this.user.role
+          }
+        }).then(response=>{
+          console.log(response)
+          if(response.data.meta.success === false){
+            alert(response.data.meta.message)
+          }else{
+            setCookie('username',this.user.name,7*60*60*24);
+            if(this.user.role===1){   this.$router.push({path: 'TeacherHome'})  }
+            else if(this.user.role===2){  this.$router.push({path: 'StudentHome'})  }
+            else{  this.$router.push({
+              path: 'ManagerHome',
+              query:{role:this.user.role}
+            })  }
+            alert(" '欢迎,' + this.user.name + '登录大数据实验教学管理系统!'")
+          }
+
+      }).catch(function(err){
+          console.log(err)
+        });
+      }
+     },
+       /* this.$refs.loginForm.validate((valid) => {
           if(valid) {
             if (this.user.name === 'admin' && this.user.pass === '123' ) {
               this.$notify({
@@ -271,7 +303,8 @@
             return false
           }
         })
-      },
+      },*/
+
       ToRegister(){
         this.showRegister = true;
         this.showLogin = false

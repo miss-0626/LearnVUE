@@ -9,6 +9,13 @@
           <p><a>教学老师</a>      {{teacher}} </p>
           <p><a>类型</a>      {{type}} </p>
         </div>
+
+        <div>
+          <button  @click="getAnswer">测试</button>
+          <p>{{answer}}</p>
+          <img :src="image" />
+        </div>
+
       </div>
     </el-row>
   </div>
@@ -22,7 +29,26 @@
         head: '课程详情',
         course:'通信技术',
         teacher:'钟老师',
-        type:'必修'
+        type:'必修',
+        answer:'11',
+        image:''
+      }
+    },
+    methods:{
+      getAnswer:function(){
+        var vm = this;
+        this.$axios({
+          method: 'get',
+          /*url: 'https://yesno.wtf/api'*/
+          url: '/api/exper_front/lab/list'
+        }).then(response=>{
+          vm.answer = response.data.answer;
+          vm.image =  response.data.image;
+          let _data=response.data;
+        console.log(_data)
+      }).catch(function(err){
+          console.log(err)
+        })
       }
     }
   }

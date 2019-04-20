@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {//服务器代理
       '/api': {
-        target: 'https://api.douban.com',//代理地址
+        target:'http://192.168.1.236:8080',//代理地址
         changeOrigin: true,//是否允许开启代理
         pathRewrite: {'^/api': ''} //代理地址重写
       }
