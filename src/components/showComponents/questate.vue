@@ -10,20 +10,21 @@
       <el-button style="margin-left: 50px"  @click="handlefind(data,time)">空闲设备查询</el-button>
     </el-row>
     <el-table ref="filterTable" :data="tableData6.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.equiName.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
-      <el-table-column prop="equiNum" label="设备编号"></el-table-column>
+      <el-table-column prop="equiNum" label="设备编号" sortable></el-table-column>
       <el-table-column prop="equiName" label="设备名称"></el-table-column>
       <el-table-column prop="state" label="状态"
                        :filters="[{ text: '占用', value: '占用' },
-                                  { text: '空闲', value: '空闲' }]"
+                                  { text: '可预约', value: '可预约' }]"
                        :filter-method="filterTag" filter-placement="bottom-end">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.state === '占用' ? '空闲' : 'success'"
-                  disable-transitions>{{scope.row.state}}</el-tag>
+          <el-tag type="success" v-if="scope.row.state==='可预约'">{{scope.row.state}}</el-tag>
+          <el-tag type="danger" v-else-if="scope.row.state==='占用'">{{scope.row.state}}</el-tag>
+          <el-tag v-else="scope.row.state==='待审核'">{{scope.row.state}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleuse(scope.$index, scope.row)">申请借用</el-button>
+          <el-button size="mini" type="primary" @click="handleuse(scope.$index, scope.row)">预约</el-button>
         </template>
       </el-table-column>
       <el-table-column align="right" width="220">
@@ -44,7 +45,7 @@
                    :total="tableData6.length">
     </el-pagination>
 
-    <el-dialog :title="设备借用申请" :visible.sync="dialogFormVisible">
+ <!--   <el-dialog :title="设备借用申请" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules">
         <el-form-item label="借用人学号" :label-width="formLabelWidth" prop="number">
           <el-input v-model="form.number" auto-complete="off"></el-input>
@@ -75,7 +76,7 @@
         <el-button type="danger" @click="cancel">取 消</el-button>
         <el-button type="primary" @click="borrow">申 请</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
 
   </div>
 </template>
@@ -83,6 +84,7 @@
 <script>
   export default {
     name: "questate",
+    inject: ['reload'],
     data() {
       return {
         currentPage:1,
@@ -121,44 +123,7 @@
           value: '选项10',
           label: '整天'
         }],
-        tableData6: [ {
-          equiId:'1',
-          equiNum:'1-101',
-          equiName:'示波器',
-          labNum:'8-520',
-          state:'空闲'
-        },
-          {
-            equiId:'11',
-            equiNum:'1-101',
-            equiName:'信号发生器',
-            labNum:'8-520',
-            state:'占用'
-          },{
-            equiId:'12',
-            equiNum:'1-101',
-            equiName:'示波器',
-            labNum:'8-520',
-            state:'空闲'
-          },{
-            equiId:'13',
-            equiNum:'1-101',
-            equiName:'信号发生器',
-            labNum:'8-520',
-            state:'占用'
-          },{
-            equiId:'15',
-            equiNum:'1-101',
-            equiName:'信号发生器',
-            labNum:'8-520',
-            state:'空闲'
-          },{
-            equiId:'18',
-            equiNum:'1-101',
-            equiName:'示波器',
-            labNum:'8-520',
-            state:'空闲'
-          }],
+        tableData6: [],
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},
@@ -172,6 +137,23 @@
         }
       }
     },
+    mounted() {
+      var vm = this;
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.1.235:8080/exper_front/equi/list'
+      }).then(response => {
+        if(response.data === ''){
+        this.$router.push({path: '/Login'})
+      }else{
+        vm.tableData6 = response.data.data;
+        let tableData6 = response.data.data[0];
+        console.log(tableData6)
+      }
+    }).catch(function (err) {
+        console.log(err);
+      })
+    },
     methods: {
       clearFilter() {
         this.$refs.filterTable.clearFilter();
@@ -179,11 +161,7 @@
       filterTag(value, row) {
         return row.state === value;
       },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
-      },
-      handleuse(index, row) {
+      /*handleuse(index, row) {
         this.form = {
           number: '',
           name: '',
@@ -194,16 +172,40 @@
           time: ''
         };
         this.dialogFormVisible = true;
+      },*/
+      handleuse(index, row) {
+        this.id = row.equiId;
+        if(row.state === '占用'){
+          this.$message({
+            type: 'error',
+            message: '该实验设备已被占用！',
+            showClose: true
+          })
+        }else{
+        this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/equi/book/'+ this.id
+        }).then(response=>{
+          this.$message({
+          type: 'success',
+          message: response.data.meta.message,
+          showClose: true
+        })
+          this.reload()
+      }).catch(function(err){
+          console.log(err)
+        });
+      }
       },
       handlefind(data,time) {
         console.log(index, row);
       },
-      cancel(){
+/*      cancel(){
         this.dialogFormVisible = false;
       },
       borrow(){
         this.dialogFormVisible = false;
-      },
+      },*/
       handleSizeChange: function (size) {
         this.pagesize = size;
         console.log(this.pagesize);

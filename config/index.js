@@ -6,21 +6,20 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {//服务器代理
-      '/api': {
-        target:'http://192.168.1.236:8080',//代理地址
+      '/exper_front': {
+        tapiarget:'http://192.168.1.246:8080',//代理地址
         changeOrigin: true,//是否允许开启代理
-        pathRewrite: {'^/api': ''} //代理地址重写
+/*        pathRewrite: {'^/api': ''} //代理地址重写*/
       }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8082, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,

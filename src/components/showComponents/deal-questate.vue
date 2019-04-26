@@ -6,24 +6,11 @@
       </el-col>
     </el-row>
     <el-table :data="tableData20.slice((currentPage-1)*pagesize,currentPage*pagesize)" height="450"  border style="width: 100%">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="lab-table-expand">
-            <el-form-item class="labelColor" label="设备用途">
-              <span>{{ props.row.use}}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
-      <el-table-column sortable prop="equiNum" label="设备编号" ></el-table-column>
-      <el-table-column sortable prop="equiName" label="设备名称" ></el-table-column>
-      <el-table-column label="申请学生信息">
-        <el-table-column sortable prop="number" label="学号"></el-table-column>
-        <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column prop="msg" label="用途说明"></el-table-column>
-      </el-table-column>
-      <el-table-column sortable prop="data" label="借用日期" ></el-table-column>
-      <el-table-column sortable prop="time" label="借用时间" ></el-table-column>
+      <el-table-column label="id" prop="equiId" v-if="not"></el-table-column>
+      <el-table-column sortable prop="labNum" label="归属实验室号" align="center"></el-table-column>
+      <el-table-column sortable prop="equiNum" label="设备编号" align="center"></el-table-column>
+      <el-table-column sortable prop="equiName" label="设备名称" align="center"></el-table-column>
+      <el-table-column prop="user" label="申请人" align="center"></el-table-column>
       <el-table-column label="状态" prop="state" sortable align="center">
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.state==='已允许'">{{scope.row.state}}</el-tag>
@@ -31,7 +18,7 @@
           <el-tag v-else="scope.row.state==='待处理'">{{scope.row.state}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作"  width="180">
+      <el-table-column label="操作" align="center" width="180">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handlepass(scope.$index, scope.row)">允许</el-button>
           <el-button size="small" type="danger" @click="handlenot(scope.$index, scope.row)">拒绝</el-button>
@@ -53,75 +40,33 @@
 <script>
   export default {
     name: "deal-questate",
+    inject: ['reload'],
     data() {
       return {
         currentPage:1,
         pagesize:5,
-        tableData20: [{
-          equiNum:'100-01',
-          equiName: '示波器',
-          number: '20153100001',
-          name: '小明',
-          msg: '展开查看',
-          data: '2019-03-01',
-          time: '整天',
-          state: '待处理',
-          use: '用于做课程设计'
-        },
-          {
-            equiNum:'100-01',
-            equiName: '示波器',
-            number: '20153100001',
-            name: '小明',
-            msg: '展开查看',
-            data: '2019-03-01',
-            time: '整天',
-            state: '待处理',
-            use: '用于做课程设计'
-          },{
-            equiNum:'100-01',
-            equiName: '示波器',
-            number: '20153100001',
-            name: '小明',
-            msg: '展开查看',
-            data: '2019-03-01',
-            time: '整天',
-            state: '待处理',
-            use: '用于做课程设计'
-          },{
-            equiNum:'100-01',
-            equiName: '示波器',
-            number: '20153100001',
-            name: '小明',
-            msg: '展开查看',
-            data: '2019-03-01',
-            time: '整天',
-            state: '待处理',
-            use: '用于做课程设计'
-          },{
-            equiNum:'100-01',
-            equiName: '示波器',
-            number: '20153100001',
-            name: '小明',
-            msg: '展开查看',
-            data: '2019-03-01',
-            time: '整天',
-            state: '待处理',
-            use: '用于做课程设计'
-          },{
-            equiNum:'100-01',
-            equiName: '示波器',
-            number: '20153100001',
-            name: '小明',
-            msg: '展开查看',
-            data: '2019-03-01',
-            time: '整天',
-            state: '待处理',
-            use: '用于做课程设计'
-          },],
+        not:false,
+        tableData20: [],
         form: {},
         currentIndex: ''
       };
+    },
+    mounted() {
+      var vm = this;
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.1.235:8080/exper_front/equi/checkbooklist'
+      }).then(response => {
+        if(response.data === ''){
+        this.$router.push({path: '/Login'})
+      }else{
+        vm.tableData20 = response.data.data;
+        let tableData20 = response.data.data;
+        console.log(tableData20)
+      }
+    }).catch(function (err) {
+        console.log(err);
+      })
     },
     methods: {
       handleSizeChange: function (size) {
@@ -132,43 +77,62 @@
         this.currentPage = currentPage;
         console.log(this.currentPage);
       },
-      handlepass(index, row) {
-        var that = this;
+
+      handlepass(index,row){
         this.$confirm('确认允许该学生的申请吗?', '提示', {
-          confirmButtonText: '确认',
+          confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'info'
-        }).then(function () {//编辑保存
-          row.state = '已允许';
-          that.$message({
-            type: 'success',
-            message: '成功!'
-          })
-        }).catch(function () {  //编辑取消
-          that.$message({
-            type: 'info',
-            message: '放弃决定.'
-          });
+        }).then(() => {
+          this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/equi/checkbook/'+this.tableData20[index].equiId,
+        }).then(response => {
+          this.reload()
+          this.$message({
+          type: 'success',
+          message: '成功!'
+        })
+        let res = response.data;
+        console.log(res)
+      }).catch(function (err) {
+          console.log(err)
         });
+        this.reload()
+      }).catch(() => {
+          this.$message({
+          type: 'info',
+          message: '取消决定'
+        })
+      })
       },
       handlenot(index, row) {
-        var that = this;
         this.$confirm('确认拒绝该学生的申请吗?', '提示', {
-          confirmButtonText: '确认',
+          confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(function () {//编辑保存
-          row.state = '已拒绝';
-          that.$message({
-            type: 'success',
-            message: '已拒绝该学生的申请!'
-          })
-        }).catch(function () {  //编辑取消
-          that.$message({
-            type: 'info',
-            message: '放弃拒绝.'
-          });
+        }).then(() => {
+          this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/equi/refuse/'+this.tableData20[index].equiId,
+        }).then(response => {
+          this.reload()
+          this.$message({
+          type: 'success',
+          message: '已拒绝!'
+        })
+        let res = response.data;
+        console.log(res)
+      }).catch(function (err) {
+          console.log(err)
         });
+        this.reload()
+      }).catch(() => {
+          this.$message({
+          type: 'info',
+          message: '取消决定'
+        })
+      })
       }
     }
   }

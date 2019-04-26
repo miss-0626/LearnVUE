@@ -92,8 +92,8 @@
 
         <el-row type="flex" justify="center">
           <el-col :span="14">
-            <el-form-item class="labelColor" label="手机" prop="phone">
-              <el-input v-model="user.phone" placeholder="请输入手机号码"></el-input>
+            <el-form-item class="labelColor" label="学号/手机" prop="number">
+              <el-input v-model="user.number" placeholder="学生请输入学号"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -116,6 +116,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row type="flex" justify="center">
           <el-col :span="14">
             <el-form-item>
@@ -137,14 +138,14 @@
 </template>
 
 <<script>
-  import {setCookie,getCookie} from '../common/cookie.js'
-
   export default {
     name:'login',
     data () {
       var validatePass = (rule, value, callback) =>{
         if (value === '') {
           callback(new Error('请输入密码'));
+        }else if (value.length < 6) {
+          callback(new Error('密码不能小于6位'));
         } else {
           if (this.user.checkPass !== '') {
             this.$refs.user.validateField('checkPass');
@@ -162,7 +163,20 @@
           callback();
         }
       }
-      var validatePhone = (rule, value,callback) => {
+      var validateNum = (rule, value, callback) => {
+        const reg =/^[2][0][0,1,2][0-9]{8}$/;
+        const reg1 =/^[1][3,4,5,7,8][0-9]{9}$/;
+        if(value===''||value===undefined||value===null){
+          callback(new Error('请输入学号或电话号码'));
+        }else {
+          if (((!reg.test(value))&&(!reg1.test(value))) && value!== '') {
+            callback(new Error('请输入正确的学号或电话号码'));
+          } else {
+            callback();
+          }
+        }
+      }
+/*      var validatePhone = (rule, value,callback) => {
         const reg =/^[1][3,4,5,7,8][0-9]{9}$/;
         if(value==''||value==undefined||value==null){
           callback();
@@ -173,11 +187,11 @@
             callback();
           }
         }
-      }
+      }*/
       var validateEmail = (rule, value,callback)=> {
         const reg =/^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/;
-        if(value==''||value==undefined||value==null){
-          callback();
+        if(value===''||value===undefined||value===null){
+          callback(new Error('请输入邮箱地址'));
         }else{
           if (!reg.test(value)){
             callback(new Error('请输入正确的邮箱地址'));
@@ -187,8 +201,8 @@
         }
       }
       return {
-        mounted() {
-          /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
+/*        mounted() {
+          /!*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*!/
           if (getCookie('username')) {
             if (this.user.role === 1) {
               this.$router.push({path: 'TeacherHome'})
@@ -200,7 +214,7 @@
               this.$router.push({path: 'ManagerHome'})
             }
           }
-        },
+        },*/
         user: {
           show: {
             pass: false,
@@ -215,14 +229,11 @@
           value: ''
         },
         options: [{
-          value: '1',
+          value: 'teacher',
           label: '教师'
         }, {
-          value: '2',
+          value: 'student',
           label: '学生'
-        }, {
-          value: '3',
-          label: '管理员'
         }],
         showLogin: true,
         showRegister: false,
@@ -233,8 +244,8 @@
           newName: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
           newPass: [{required: true, validator: validatePass, trigger: 'blur'}],
           checkPass: [{required: true, validator: validatePass2, trigger: 'blur'}],
-          phone: [{validator: validatePhone, trigger: 'blur'}],
-          email: [{ validator: validateEmail, trigger: 'blur'}],
+          number: [{required: true,validator: validateNum, trigger: 'blur'}],
+          email: [{required: true, validator: validateEmail, trigger: 'blur'}],
           role: [{required: true, message: '请选择角色', trigger: 'blur', type: 'number'}]
         }
       };
@@ -242,47 +253,71 @@
     methods: {
       login () {
         if (this.user.name === '' || this.user.pass === '' ){
-          alert("请输入用户名或密码")
+          this.$message({
+                type: 'error',
+                message: '请输入用户名和密码',
+                showClose: true
+              })
         }else{
          /* let data = {'userName':this.user.name,'password':this.user.pass,'role':this.user.role};*/
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.236:8080/exper_front/front/login',
+          url: 'http://192.168.1.235:8080/exper_front/front/login',
           data:{
             userName:this.user.name,
             password:this.user.pass,
             role:this.user.role
           }
         }).then(response=>{
-          console.log(response)
-          if(response.data.meta.success === false){
-            alert(response.data.meta.message)
-          }else{
-            setCookie('username',this.user.name,7*60*60*24);
+          let res = response.data
+          console.log(res)
+
+          if(response.data.meta.success){
+
+            this.$notify({
+              type: 'success',
+              message: '欢迎,' + this.user.name + '登录大数据实验教学管理系统!',
+              duration: 3500
+            });
+
+/*            setCookie('username',this.user.name,7*60*60*24);*/
+            const name = this.user.name;
+            const role = this.user.role;
+            sessionStorage.setItem('用户名称', JSON.stringify(name));
+            sessionStorage.setItem('用户角色', JSON.stringify(role));
+
             if(this.user.role===1){   this.$router.push({path: 'TeacherHome'})  }
             else if(this.user.role===2){  this.$router.push({path: 'StudentHome'})  }
-            else{  this.$router.push({
-              path: 'ManagerHome',
-              query:{role:this.user.role}
-            })  }
-            alert(" '欢迎,' + this.user.name + '登录大数据实验教学管理系统!'")
+            else{  this.$router.push({path: 'ManagerHome', query:{role:this.user.role}})  }
           }
-
+          else{
+            this.$message({
+              type: 'error',
+              message:response.data.meta.message,
+              showClose: true
+            })
+          }
       }).catch(function(err){
           console.log(err)
         });
       }
      },
-       /* this.$refs.loginForm.validate((valid) => {
+
+     /* login () {
+        this.$refs.loginForm.validate((valid) => {
           if(valid) {
-            if (this.user.name === 'admin' && this.user.pass === '123' ) {
+            if (this.user.name === 'admin' && this.user.pass === '123456' ) {
               this.$notify({
                 type: 'success',
                 message: '欢迎,' + this.user.name + '登录大数据实验教学管理系统!',
-                duration: 3500
+                duration: 1000
               })
 
-              setCookie('username',this.user.name,7*60*60*24)
+              // setCookie('username',this.user.name,7*60*60*24)
+              const name = this.user.name;
+              const role = this.user.role;
+              sessionStorage.setItem('用户名称', JSON.stringify(name));
+              sessionStorage.setItem('用户角色', JSON.stringify(role));
 
               if(this.user.role===1){   this.$router.push({path: 'TeacherHome'})  }
               else if(this.user.role===2){  this.$router.push({path: 'StudentHome'})  }
@@ -305,6 +340,80 @@
         })
       },*/
 
+      register(){
+        if(this.user.newName === "" || this.user.newPass === ""|| this.user.checkPass === ""|| this.user.value === ""){
+          alert("请输入用户名或密码并确认身份")
+        }else if(this.user.value==='student'){
+          this.$axios({
+            method: 'post',
+            url: 'http://192.168.1.235:8080/exper_front/front/register/stu',
+            data:{
+              id: 0,
+                userName: this.user.newName,
+                password: this.user.newPass,
+                role: this.user.value,
+                number: this.user.number,
+                email: this.user.email
+            }
+          }).then(response => {
+              let res = response.data
+              console.log(res)
+            if(res.meta.success === true){
+              this.$notify({
+                type: 'success',
+                message: '注册成功',
+                duration: 1000
+              })
+              /*注册成功之后再跳回登录页*/
+              setTimeout(function(){
+                this.showRegister = false;
+                this.showLogin = true;
+              }.bind(this),1000)
+            }else{
+              this.$message.error(res.errorMsg)
+              this.$refs.loginForm2.resetFields();
+            }
+          }).catch(function (response) {
+              console.log(response)
+            })
+          }
+          else{
+          this.$axios({
+            method: 'post',
+            url: 'http://192.168.1.235:8080/exper_front/front/register/tea',
+            data:{
+                userName: this.user.newName,
+                password: this.user.newPass,
+                role: this.user.value,
+                number: this.user.number,
+                email: this.user.email,
+                id:'',
+                registerTime:''
+            }
+          }).then(response => {
+            let res = response.data
+            console.log(res)
+          if(res.meta.success === true){
+            this.$notify({
+              type: 'success',
+              message: '注册成功',
+              duration: 1000
+            })
+            /*注册成功之后再跳回登录页*/
+            setTimeout(function(){
+              this.showRegister = false;
+              this.showLogin = true;
+            }.bind(this),1000)
+          }else{
+            this.$message.error(res.errorMsg)
+            this.$refs.loginForm2.resetFields();
+          }
+        }).catch(function (response) {
+            console.log(response)
+          })
+        }
+      },
+
       ToRegister(){
         this.showRegister = true;
         this.showLogin = false
@@ -313,29 +422,8 @@
         this.showRegister = false;
         this.showLogin = true
       },
-      register(){
-        if(this.user.newName === "" || this.user.newPass === ""|| this.user.checkPass === ""|| this.user.value === ""){
-          alert("请输入用户名或密码并确认身份")
-        }else{
-          let data = {'user.name':this.user.newName,'user.pass':this.user.newPass,'user.role':this.user.value};
-          this.$http.post('http://localhost/vueapi/index.php/Home/user/register',data).then((res)=>{
-            console.log(res)
-          if(res.data === "ok"){
-            this.$notify({
-              type: 'success',
-              message: '注册成功',
-              duration: 3500
-            })
-            this.user.name = '';
-            this.user.pass = '';
-            /*注册成功之后再跳回登录页*/
-            setTimeout(function(){
-              this.showRegister = false;
-              this.showLogin = true;
-            }.bind(this),1000)
-          }
-        })
-        }
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
       }
   }

@@ -12,20 +12,21 @@
   <el-table ref="filterTable" :data="tableData3.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.labNum.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
     <el-table-column prop="labNum" label="实验室编号" sortable ></el-table-column>
     <el-table-column prop="labName" label="实验室名称" ></el-table-column>
-    <el-table-column prop="state" label="状态"
+    <el-table-column prop="isUsed" label="状态"
                      :filters="[{ text: '占用', value: '占用' }, { text: '空闲', value: '空闲' }]"
       :filter-method="filterTag" filter-placement="bottom-end">
       <template slot-scope="scope">
-        <el-tag :type="scope.row.state === '占用' ? '空闲' : 'success'"
-          disable-transitions>{{scope.row.state}}</el-tag>
+        <el-tag :type="scope.row.isUsed === '空闲' ? '占用' : 'danger'"
+          disable-transitions>{{scope.row.isUsed}}</el-tag>
       </template>
     </el-table-column>
     <el-table-column label="操作">
     <template slot-scope="scope">
-      <el-button size="mini" @click="handleuse(scope.$index, scope.row)">申请借用</el-button>
+      <el-button size="mini" type="primary" @click="handleuse(scope.$index,scope.row)">借用</el-button>
+      <el-button size="mini" @click="handlereturn(scope.$index,scope.row)">归还</el-button>
     </template>
     </el-table-column>
-    <el-table-column align="right" width="220">
+    <el-table-column align="right" width="200">
       <template slot="header" slot-scope="scope">
         <el-input v-model="search" size="mini" placeholder="输入实验室编号搜索">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -43,7 +44,7 @@
                    :total="tableData3.length">
     </el-pagination>
 
-    <el-dialog :title="实验室借用申请" :visible.sync="dialogFormVisible">
+ <!--   <el-dialog :title="实验室借用申请" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules">
         <el-form-item label="借用人学号" :label-width="formLabelWidth" prop="number">
           <el-input v-model="form.number" auto-complete="off"></el-input>
@@ -74,7 +75,7 @@
         <el-button type="danger" @click="cancel">取 消</el-button>
         <el-button type="primary" @click="borrow">申 请</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
 
   </div>
 </template>
@@ -82,6 +83,7 @@
 <script>
     export default {
         name: "labstate",
+        inject: ['reload'],
       data() {
         return {
           currentPage:1,
@@ -119,42 +121,8 @@
           value: '选项10',
             label: '整天'
         }],
-          tableData3: [{
-            labId:'1',
-            labNum:'6-210',
-            labName: '物理实验室',
-            state: '空闲'
-          },{
-            labId:'1',
-            labNum:'6-212',
-            labName: '硬件实验室',
-            state: '占用'
-          },{
-            labId:'1',
-            labNum:'8-207',
-            labName: '电子实验室',
-            state: '占用'
-          },{
-            labId:'1',
-            labNum:'8-314',
-            labName: '电子实验室',
-            state: '空闲'
-          },{
-            labId:'1',
-            labNum:'8-512',
-            labName: '光学实验室',
-            state: '空闲'
-          },{
-            labId:'1',
-            labNum:'6-312',
-            labName: '硬件实验室',
-            state: '空闲'
-          },{
-            labId:'1',
-            labNum:'8-501',
-            labName: '光学实验室',
-            state: '空闲'
-          }],
+          tableData3: [],
+          id:'',
           dialogFormVisible: false,
           formLabelWidth: '100px',
           form: {},
@@ -169,18 +137,31 @@
           }
         };
       },
+      mounted() {
+        var vm = this;
+        this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/lab/list'
+        }).then(response => {
+          if(response.data === ''){
+          this.$router.push({path: '/Login'})
+        }else{
+          vm.tableData3 = response.data.data;
+          let tableData3 = response.data.data[0];
+          console.log(tableData3)
+        }
+      }).catch(function (err) {
+          console.log(err)
+        })
+      },
       methods: {
         clearFilter() {
           this.$refs.filterTable.clearFilter();
         },
         filterTag(value, row) {
-          return row.state === value;
+          return row.isUsed === value;
         },
-        filterHandler(value, row, column) {
-          const property = column['property'];
-          return row[property] === value;
-        },
-        handleuse(index, row) {
+/*        handleuse(index, row) {
           this.form = {
             number: '',
             name: '',
@@ -190,16 +171,56 @@
             time: ''
           };
           this.dialogFormVisible = true;
+        },*/
+        handleuse(index, row) {
+          this.id = row.labId;
+          if(row.isUsed === '占用'){
+            this.$message({
+              type: 'error',
+              message: '该实验室已被占用！',
+              showClose: true
+            })
+          }else{
+          this.$axios({
+            method: 'get',
+            url: 'http://192.168.1.235:8080/exper_front/lab/book/'+this.id
+          }).then(response=>{
+            this.$message({
+            type: 'success',
+            message: response.data.meta.message,
+            showClose: true
+          })
+            this.reload()
+        }).catch(function(err){
+            console.log(err)
+          });
+        }
+        },
+        handlereturn(index, row){
+          this.id = row.labId;
+          this.$axios({
+            method: 'get',
+            url: 'http://192.168.1.235:8080/exper_front/lab/cancel/'+this.id
+          }).then(response=>{
+            this.$message({
+            type: 'success',
+            message: response.data.meta.message,
+            showClose: true
+          })
+          this.reload()
+        }).catch(function(err){
+            console.log(err)
+          });
         },
         handlefind(data,time) {
           console.log(index, row);
         },
-        cancel(){
+/*        cancel(){
           this.dialogFormVisible = false;
         },
         borrow(){
           this.dialogFormVisible = false;
-        },
+        },*/
         handleSizeChange: function (size) {
           this.pagesize = size;
           console.log(this.pagesize);

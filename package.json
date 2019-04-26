@@ -13,6 +13,7 @@
     "ajv": "^6.9.1",
     "axios": "^0.18.0",
     "element-ui": "^2.5.4",
+    "file-saver": "^2.0.1",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1"

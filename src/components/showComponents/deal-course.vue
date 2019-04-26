@@ -4,13 +4,21 @@
     <el-button @click="clearFilter" style="margin: 5px 15px 0 15px">清除筛选</el-button>
     <el-button type="primary" @click="add" style="float:right;margin-right:30px">新增课程信息</el-button>
     </el-row>
-    <el-table :data="tableData22.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
+    <el-table ref="filterTable" :data="tableData22.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" border style="width: 100%">
+      <el-table-column label="id" prop="courseId" v-if="not"></el-table-column>
       <el-table-column prop="courseName" label="教学课程" sortable></el-table-column>
-      <el-table-column prop="teacher" label="教学老师" sortable></el-table-column>
-      <el-table-column prop="type" label="类型" sortable  column-key="date"
+      <el-table-column prop="lecturer" label="教学老师" sortable></el-table-column>
+      <el-table-column prop="courseSum" label="课程简介" sortable v-if="not"></el-table-column>
+      <el-table-column prop="courseType" label="类型" sortable  column-key="date"
                        :filters="[{text: '必修', value: '必修'},
-                   {text: '选修', value: '选修'}]" :filter-method="filterHandler">
+                                  {text: '选修', value: '选修'}]" :filter-method="filterTag">
       </el-table-column>
+      <el-table-column label="选课人数/人数上限" v-if="not">
+        <template slot-scope="scope">
+          <span>{{scope.row.count}}</span>/<span>{{scope.row.limit}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="remark" label="备注" v-if="not"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
@@ -43,13 +51,27 @@
           <el-input v-model="form.courseName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="教学老师" :label-width="formLabelWidth">
-          <el-input v-model="form.teacher" auto-complete="off"></el-input>
+          <el-select v-model="form.lecturer" placeholder="请选择">
+            <el-option v-for="item in selects" :key="item" :label="item" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="课程简介" :label-width="formLabelWidth">
+          <el-input v-model="form.courseSum" type="textarea" :rows="3" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="类型" :label-width="formLabelWidth">
-          <el-select v-model="form.type" placeholder="课程类型">
+          <el-select v-model="form.courseType" placeholder="课程类型">
             <el-option label="必修" value="必修"></el-option>
             <el-option label="选修" value="选修"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="选课人数" :label-width="formLabelWidth">
+          <el-input v-model="form.count" auto-complete="off" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="人数上限" :label-width="formLabelWidth">
+          <el-input v-model="form.limit" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" :label-width="formLabelWidth">
+          <el-input v-model="form.remark" type="textarea" :rows="3" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -63,46 +85,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { reformat } from '../../common/reformartDate'
-
   export default {
     name: "deal-course",
+    inject: ['reload'],
     data() {
       return {
         currentPage:1,
         pagesize:5,
-        tableData22: [{
-          courseId:'1',
-          courseName:'通信技术',
-          teacher:'崔老师',
-          type:'必修'
-        },
-          {
-            courseId:'12',
-            courseName:'图像处理',
-            teacher:'崔老师',
-            type:'必修'
-          },{
-            courseId:'13',
-            courseName:'通信技术',
-            teacher:'崔老师',
-            type:'必修'
-          },{
-            courseId:'17',
-            courseName:'通信技术',
-            teacher:'崔老师',
-            type:'必修'
-          },{
-            courseId:'14',
-            courseName:'计算机基础',
-            teacher:'崔老师',
-            type:'必修'
-          },{
-            courseId:'15',
-            courseName:'通信技术',
-            teacher:'崔老师',
-            type:'必修'
-          }],
+        not:false,
+        selects:[],
+        tableData22: [],
         dialogFormVisible: false,
         formLabelWidth: '100px',
         form: {},
@@ -115,13 +107,29 @@
         search:''
       }
     },
+    mounted() {
+      var vm = this;
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.1.235:8080/exper_front/course/list'
+      }).then(response => {
+        if(response.data === ''){
+          this.$router.push({path: '/Login'})
+        }else{
+          vm.tableData22 = response.data.data;
+          let tableData22 = response.data.data;
+          console.log(tableData22)
+        }
+      }).catch(function (err) {
+        console.log(err);
+      })
+    },
     methods: {
       clearFilter() {
         this.$refs.filterTable.clearFilter();
       },
-      filterHandler(value, row, column) {
-        const property = column['property'];
-        return row[property] === value;
+      filterTag(value, row) {
+        return row.courseType === value;
       },
       handleSizeChange: function (size) {
         this.pagesize = size;
@@ -131,33 +139,131 @@
         this.currentPage = currentPage;
         console.log(this.currentPage);
       },
+
       add() {
+        var vm = this;
+        this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/lecturer/name'
+        }).then(response => {
+          console.log(response.data)
+          if(response.data === ''){
+            this.$router.push({path: '/Login'})
+          }else{
+            if (!response.data.meta.success) {
+              this.$message({
+                type: 'info',
+                message: response.data.meta.message,
+                duration: 6000
+              });
+            } else {
+              vm.selects= response.data.data;
+              let selects= response.data.data;
+              console.log(selects)
+            }
+          }
+        }).catch(function (err) {
+          console.log(err);
+        })
         this.dialogStatus = "update";
         this.form = {
-          name: '',
-          teacher:'',
-          institute:'',
-          introduce: '',
-          desc:''
+          courseName: '',
+          lecturer:'',
+          courseSum:'',
+          courseType: '',
+          count:'',
+          limit:'',
+          remark:''
         };
         this.dialogFormVisible = true;
       },
       update() {
-        this.form.date = reformat(this.form.date);
-        this.tableData22.push(this.form);
+        this.$axios({
+          method: 'post',
+          url: 'http://192.168.1.235:8080/exper_front/course/add',
+          data: {
+            courseId:'',
+            courseName: this.form.courseName,
+            lecturer: this.form.lecturer,
+            courseSum: this.form.courseSum,
+            courseType: this.form.courseType,
+            count: '',
+            limit: this.form.limit,
+            remark: this.form.remark,
+          }
+        }).then(response => {
+          this.reload()
+          let res = response.data;
+          console.log(res)
+        }).catch(function (err) {
+          console.log(err)
+        });
         this.dialogFormVisible = false;
       },
       editdate() {
+        this.$axios({
+          method: 'post',
+          url: 'http://192.168.1.235:8080/exper_front/course/update',
+          data: {
+              courseId: this.form.courseId,
+              courseName: this.form.courseName,
+              lecturer: this.form.lecturer,
+              courseSum: this.form.courseSum,
+              courseType: this.form.courseType,
+              count: this.form.count,
+              limit: this.form.limit,
+              remark: this.form.remark,
+          }
+        }).then(response => {
+          this.reload()
+          let res = response.data;
+          console.log(res)
+        }).catch(function (err) {
+          console.log(err)
+        });
         this.dialogFormVisible = false;
       },
       cancel() {
         this.dialogFormVisible = false;
       },
       handleEdit(index, row) {
-        this.dialogStatus = "editdate";
-        this.form = this.tableData22[index];
-        this.currentIndex = index;
+        var vm = this;
+        this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/lecturer/name'
+        }).then(response => {
+          console.log(response.data)
+          if(response.data === ''){
+            this.$router.push({path: '/Login'})
+          }else{
+            if (!response.data.meta.success) {
+              this.$message({
+                type: 'info',
+                message: response.data.meta.message,
+                duration: 6000
+              });
+            } else {
+              vm.selects= response.data.data;
+              let selects= response.data.data;
+              console.log(selects)
+            }
+          }
+        }).catch(function (err) {
+          console.log(err);
+        })
         this.dialogFormVisible = true;
+        this.dialogStatus = "editdate";
+        this.form.courseId = this.tableData22[index].courseId;
+        this.$axios({
+          method: 'get',
+          url: 'http://192.168.1.235:8080/exper_front/course/update/'+this.tableData22[index].courseId,
+        }).then(response => {
+          vm.form = response.data.data;
+          let res = response.data;
+          console.log(res);
+        }).catch(function (err) {
+          console.log(err)
+        });
       },
       handleDelete(index, row) {
         this.$confirm('此操作将永久删除该条信息, 是否继续?', '提示', {
@@ -165,11 +271,21 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.tableData22.splice(index, 1);
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+          this.$axios({
+            method: 'get',
+            url: 'http://192.168.1.235:8080/exper_front/course/delete/'+this.tableData22[index].courseId,
+          }).then(response => {
+            this.reload()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            let res = response.data;
+            console.log(res)
+          }).catch(function (err) {
+            console.log(err)
+          });
+          this.dialogFormVisible = false;
         }).catch(() => {
           this.$message({
             type: 'info',

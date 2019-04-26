@@ -1,18 +1,18 @@
 <template>
   <div style="margin-top: 5px">
-    <el-table ref="filterTable" :data="tableData15.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100% ">
-      <el-table-column prop="number" label="学号" sortable></el-table-column>
-      <el-table-column prop="name" label="姓名" sortable></el-table-column>
-      <el-table-column prop="experiment" label="实验名称" sortable></el-table-column>
-      <el-table-column prop="report" label="实验报告">
-        <template slot-scope="props">
-          <el-popover placement="right" title="" trigger="click">
-            <img :src="props.row.report" style="max-width:1000px;max-height:600px"/>
-            <img slot="reference" :src="props.row.report" :alt="props.row.report" style="width:50px;height:30px">
-          </el-popover>
+    <el-table :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
+      <el-table-column label="id" prop="id" v-if="not"></el-table-column>
+      <el-table-column label="url" prop="fileUrl" v-if="not"></el-table-column>
+      <el-table-column label="课程名" prop="course" sortable></el-table-column>
+      <el-table-column label="文件名" prop="fileName"></el-table-column>
+      <el-table-column label="上传者" prop="uploader"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="small" type="primary" @click="handledownload(scope.$index, scope.row)">下 载</el-button>
         </template>
       </el-table-column>
     </el-table>
+
     <el-pagination style="padding-left: 30px;margin-top: 5px"
                    @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
@@ -20,7 +20,7 @@
                    :page-sizes="[5, 10, 20, 40]"
                    :page-size="pagesize"
                    layout="total, sizes, prev, pager, next, jumper"
-                   :total="tableData15.length">
+                   :total="tableData.length">
     </el-pagination>
   </div>
 </template>
@@ -32,28 +32,26 @@
         return {
           currentPage:1,
           pagesize:5,
-          tableData15: [{
-            number: '201500001',
-            name: '小明',
-            experiment: '现代通信网',
-            report: '../static/image/logo.png'
-          }, {
-            number: '201500001',
-            name: '小明',
-            experiment: '现代通信网',
-            report: '../static/image/1.jpg'
-          }, {
-            number: '201500001',
-            name: '小明',
-            experiment: '现代通信网',
-            report: '../static/image/logo.png'
-          }, {
-            number: '201500001',
-            name: '小明',
-            experiment: '现代通信网',
-            report: '../static/image/5.jpg'
-          }]
+          not:false,
+          tableData: []
         }
+      },
+      mounted() {
+        var vm = this;
+        this.$axios({
+          method: 'post',
+          url: 'http://192.168.1.235:8080/exper_front/info/mywork'
+        }).then(response => {
+          if(response.data === ''){
+          this.$router.push({path: '/Login'})
+        }else{
+          vm.tableData = response.data.data;
+          let data = response.data.data;
+          console.log(data)
+        }
+      }).catch(function (err) {
+          console.log(err);
+        })
       },
       methods:{
         handleSizeChange: function (size) {
@@ -63,7 +61,29 @@
         handleCurrentChange: function(currentPage){
           this.currentPage = currentPage;
           console.log(this.currentPage);
-        }
+        },
+        handledownload(index, row){
+          this.$axios({
+            method: 'post',
+            url: 'http://192.168.1.235:8080/exper_front/file/download',
+            data: {
+              fileName:this.tableData[index].fileName,
+              url:this.tableData[index].fileUrl,
+            },
+            responseType: 'blob'
+          }).then(response => {
+            let aTag = document.createElement('a');
+          let blob = new Blob([response.data],{type: 'application/octet-stream;charset=utf-8'});　　// 这个content是下载的文件内容，自己修改
+          aTag.download = row.fileName;　　　　　　// 下载的文件名
+          aTag.href = URL.createObjectURL(blob);
+          aTag.click();
+          URL.revokeObjectURL(blob);
+          let res = response.data;
+          console.log(res)
+        }).catch(function (err) {
+            console.log(err)
+          });
+        },
       }
     }
 

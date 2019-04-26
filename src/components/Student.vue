@@ -1,7 +1,7 @@
 <template>
   <div class="Student">
     <div class="wrapper">
-    <show @transferUser="getUser"></show>
+    <show></show>
   <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router style=";box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
     <el-menu-item index="StudentHome">首页</el-menu-item>
     <el-submenu index="2">
@@ -28,15 +28,25 @@
     </el-submenu>
     <el-submenu index="5">
       <template slot="title">信息查询与维护</template>
+      <el-submenu index="5-1">
+        <template slot="title">账号信息</template>
       <el-menu-item index="Studentpmessage">个人信息</el-menu-item>
       <el-menu-item index="Studentpassword">修改密码</el-menu-item>
-      <el-menu-item index="Studentpscore">成绩查询</el-menu-item>
-      <el-submenu index="5-4">
-        <template slot="title">申请信息</template>
-      <el-menu-item index="Studentpproject">项目申报情况</el-menu-item>
-      <el-menu-item index="p-lab-que">预约情况</el-menu-item>
       </el-submenu>
-      <el-menu-item index="Studentpreport">实验报告</el-menu-item>
+      <el-submenu index="5-2">
+        <template slot="title">信息查询</template>
+        <el-menu-item index="pcourse">我的课程</el-menu-item>
+        <el-menu-item index="Student-p-lab-que">我的预约</el-menu-item>
+        <el-menu-item index="Studentpreport">我的文件</el-menu-item>
+        <el-menu-item index="Studentpscore">我的成绩</el-menu-item>
+        <el-menu-item index="Studentpproject">我的项目</el-menu-item>
+      </el-submenu>
+      <el-submenu index="5-3">
+        <template slot="title">课程讨论</template>
+        <el-menu-item index="Student-ptalk">我的评论</el-menu-item>
+        <el-menu-item index="Student-preply">我的回复</el-menu-item>
+        <el-menu-item index="Student-p-to-reply">回复我的</el-menu-item>
+      </el-submenu>
     </el-submenu>
     <el-menu-item index="Studentstudy">学习探讨区</el-menu-item>
   </el-menu>
@@ -50,12 +60,10 @@
 /*  import  from './'*/
   import show from './show.vue'
   import foot from './foot.vue'
-import LabDetail from "./showComponents/lab-detail";
 
     export default {
         name: "Student",
       components:{
-        LabDetail,
           show,
           foot
       },
@@ -67,11 +75,8 @@ import LabDetail from "./showComponents/lab-detail";
         };
       },
       methods: {
-          getUser (msg) {
-            this.username = msg;
-          },
-                handleSelect(key, keyPath) {
-                  console.log(key, keyPath);
+           handleSelect(key, keyPath) {
+           console.log(key, keyPath);
         }
       }
     }

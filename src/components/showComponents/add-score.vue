@@ -175,8 +175,8 @@
         currentIndex: '',
         dialogStatus: "",
         textMap: {
-          update: "新增学生信息",
-          editdate: "修改学生信息"
+          update: "新增成绩",
+          editdate: "修改成绩"
         },
       }
     },

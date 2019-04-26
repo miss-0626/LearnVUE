@@ -33,6 +33,7 @@ import dealcourse from '../components/showComponents/deal-course'
 import dealproject from '../components/showComponents/deal-project'
 import dealteacher from '../components/showComponents/deal-teacher'
 import dealmessage from '../components/showComponents/deal-message'
+import dealtalk from '../components/showComponents/deal-talk'
 import addproject from '../components/showComponents/add-project'
 import addscore from '../components/showComponents/add-score'
 import labdetail from '../components/showComponents/lab-detail'
@@ -41,6 +42,11 @@ import coursedetail from '../components/showComponents/course-detail'
 import teacherdetail from '../components/showComponents/teacher-detail'
 import password from '../components/showComponents/password'
 import plabque from '../components/showComponents/p-lab-que'
+import pcourse from '../components/showComponents/pcourse'
+import ptalk from '../components/showComponents/ptalk'
+import preply from '../components/showComponents/preply'
+import ptoreply from '../components/showComponents/p-to-reply'
+
 
 Vue.use(Router);
 
@@ -48,8 +54,19 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'rout-Login',
+      component: Login
+    },
+    {
+      path: '/Login',
       name: 'Login',
       component: Login
+/*      children:[
+        {
+          path: '/Home',
+          name: 'Login-Home',
+          component: Home
+        }]*/
     },
     {
       path: '/Home',
@@ -61,53 +78,42 @@ export default new Router({
       name: 'showmsg',
       component: showmsg
     },
- /*   {
-      path: '/lab-detail',
-      name: 'lab-detail',
-      component: labdetail
-    },
-    {
-      path: '/que-detail',
-      name: 'que-detail',
-      component: quedetail
-    },
-    {
-      path: '/course-detail',
-      name: 'course-detail',
-      component: coursedetail
-    },
-    {
-      path: '/teacher-detail',
-      name: 'teacher-detail',
-      component: teacherdetail
-    },*/
     {
       path: '/foot',
       name: 'foot',
       component:foot
     },
     {
-      path: '/Login',
-      name: 'Login',
-      component: Login,
-      children:[
-        {
-          path: '/Home',
-          name: 'Home',
-          component: Home
-        }]
-    },
-    {
       path: '/show',
       name: 'show',
-      component: show,
-      children:[
+      component: show
+/*      children:[
         {
           path: '/Login',
           name: 'Login',
           component: Login
-        }]
+        }]*/
     },
+    /*   {
+     path: '/lab-detail',
+     name: 'lab-detail',
+     component: labdetail
+   },
+   {
+     path: '/que-detail',
+     name: 'que-detail',
+     component: quedetail
+   },
+   {
+     path: '/course-detail',
+     name: 'course-detail',
+     component: coursedetail
+   },
+   {
+     path: '/teacher-detail',
+     name: 'teacher-detail',
+     component: teacherdetail
+   },*/
     {
       path: '/Student',
       name: 'Student',
@@ -115,7 +121,7 @@ export default new Router({
       children:[
         {
           path: '/Studentstudy',
-          name: 'study',
+          name: 'Studentstudy',
           component: study
         },
         {
@@ -189,9 +195,29 @@ export default new Router({
           component:pscore
         },
         {
-          path:'/p-lab-que',
-          name:'p-lab-que',
+          path:'/Student-p-lab-que',
+          name:'Student-p-lab-que',
           component:plabque
+        },
+        {
+          path:'/pcourse',
+          name:'pcourse',
+          component:pcourse
+        },
+        {
+          path:'/Student-ptalk',
+          name:'Student-ptalk',
+          component:ptalk
+        },
+        {
+          path:'/Student-preply',
+          name:'Student-preply',
+          component:preply
+        },
+        {
+          path:'/Student-p-to-reply',
+          name:'Student-p-to-reply',
+          component:ptoreply
         },
         {
           path:'/Studentpproject',
@@ -204,23 +230,23 @@ export default new Router({
           component:preport
         },
         {
-          path: '/lab-detail',
-          name: 'lab-detail',
+          path: '/Student-lab-detail',
+          name: 'Student-lab-detail',
           component: labdetail
         },
         {
-          path: '/que-detail',
-          name: 'que-detail',
+          path: '/Student-que-detail',
+          name: 'Student-que-detail',
           component: quedetail
         },
         {
-          path: '/course-detail',
-          name: 'course-detail',
+          path: '/Student-course-detail',
+          name: 'Student-course-detail',
           component: coursedetail
         },
         {
-          path: '/teacher-detail',
-          name: 'teacher-detail',
+          path: '/Student-teacher-detail',
+          name: 'Student-teacher-detail',
           component: teacherdetail
         }]
     },
@@ -233,7 +259,7 @@ export default new Router({
       children:[
         {
           path: '/Teacherstudy',
-          name: 'study',
+          name: 'Teacherstudy',
           component: study
         },
         {
@@ -318,25 +344,40 @@ export default new Router({
           component:readreport
         },
         {
-          path: '/lab-detail',
-          name: 'lab-detail',
+          path:'/Teacher-p-to-reply',
+          name:'Teacher-p-to-reply',
+          component:ptoreply
+        },
+        {
+          path:'/Teacher-ptalk',
+          name:'Teacher-ptalk',
+          component:ptalk
+        },
+        {
+          path:'/Teacher-preply',
+          name:'Teacher-preply',
+          component:preply
+        },
+        {
+          path: '/Teacher-lab-detail',
+          name: 'Teacher-lab-detail',
           component: labdetail
         },
         {
-          path: '/que-detail',
-          name: 'que-detail',
+          path: '/Teacher-que-detail',
+          name: 'Teacher-que-detail',
           component: quedetail
         },
         {
-          path: '/course-detail',
-          name: 'course-detail',
+          path: '/Teacher-course-detail',
+          name: 'Teacher-course-detail',
           component: coursedetail
         },
         {
-          path: '/teacher-detail',
-          name: 'teacher-detail',
+          path: '/Teacher-teacher-detail',
+          name: 'Teacher-teacher-detail',
           component: teacherdetail
-        },]
+        }]
     },
 
 
@@ -411,6 +452,11 @@ export default new Router({
           component:dealmessage
         },
         {
+          path:'/deal-talk',
+          name:'deal-talk',
+          component:dealtalk
+        },
+        {
           path:'/Managerpmessage',
           name:'Managerpmessage',
           component:pmessage
@@ -424,26 +470,6 @@ export default new Router({
           path:'/Managerscore',
           name:'Managerscore',
           component:addscore
-        },
-        {
-          path: '/lab-detail',
-          name: 'lab-detail',
-          component: labdetail
-        },
-        {
-          path: '/que-detail',
-          name: 'que-detail',
-          component: quedetail
-        },
-        {
-          path: '/course-detail',
-          name: 'course-detail',
-          component: coursedetail
-        },
-        {
-          path: '/teacher-detail',
-          name: 'teacher-detail',
-          component: teacherdetail
         }]
     }
   ]

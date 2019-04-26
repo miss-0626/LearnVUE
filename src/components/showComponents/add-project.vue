@@ -46,7 +46,7 @@
                    :total="tableData14.length">
     </el-pagination>
 
-    <el-dialog :title="新增项目" :visible.sync="dialogFormVisible">
+    <el-dialog :title="title" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="项目名称" :label-width="formLabelWidth">
           <el-input v-model="form.project" auto-complete="off"></el-input>
@@ -84,6 +84,7 @@
         return {
           currentPage:1,
           pagesize:5,
+          title:'新增项目',
           tableData14: [{
             project: '蓝桥杯',
             number: '20153100001',

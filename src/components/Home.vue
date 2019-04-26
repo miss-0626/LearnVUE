@@ -34,33 +34,32 @@
           <div v-if="role === 3">
           <el-button type="primary"  size="medium" @click="add" style="float:right;margin-right:30px">新增通知</el-button>
           </div>
-        <el-table :data="tableData1" height="400" border style="width: 100%" >
-          <el-table-column prop="inform" label="通知" show-overflow-tooltip="true">
+        <el-table :data="reversetableData1" height="400" border style="width: 100%" >
+          <el-table-column label="id" prop="id" v-if="not"></el-table-column>
+          <el-table-column prop="title" label="通知" :show-overflow-tooltip="true">
             <template slot-scope="scope">
-              <a :href="scope.row.url" target="_blank" class="buttonText">{{scope.row.inform}}</a>
+              <router-link tag="a" :to="{name:'showmsg',query:{Id:scope.row.id}}">{{scope.row.title}}</router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="unit" label="发布单位" width="150" show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="uptime" label="发布时间" width="110" show-overflow-tooltip="true"></el-table-column>
-          <el-table-column prop="deadline" label="有效期限" width="110" show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="author" label="发布单位" width="150" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column prop="publishDate" label="发布时间" width="110" :show-overflow-tooltip="true"></el-table-column>
+          <el-table-column label="操作" width="80">
+            <template slot-scope="scope">
+              <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
 
-          <el-dialog :title="新增通知" :visible.sync="dialogFormVisible">
+          <el-dialog :title="title" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <el-form-item label="标题" :label-width="formLabelWidth">
-              <el-input v-model="form.inform" auto-complete="off"></el-input>
+              <el-input v-model="form.title" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="发布单位" :label-width="formLabelWidth">
-              <el-input v-model="form.unit" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="发布时间" :label-width="formLabelWidth">
-              <el-input v-model="form.uptime" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="有效期限" :label-width="formLabelWidth">
-              <el-input v-model="form.deadline" auto-complete="off"></el-input>
+              <el-input v-model="form.author" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="内容" :label-width="formLabelWidth">
-              <el-input type="textarea" :rows="4" v-model="form.main" auto-complete="off"></el-input>
+              <el-input type="textarea" :rows="4" v-model="form.detail" auto-complete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -77,7 +76,7 @@
       <h2 style="padding: 5px 15px;margin-top: 5px">最新推荐</h2>
       <ul>
         <li v-for="item in projectList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-          <router-link :to="{ name:item.url, query:{Id:item.Id}}">
+          <router-link :to="{ path:item.url, query:{Id:item.Id}}">
           <span><img :src="item.imgSrc" /></span>
           <p style="font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
           <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
@@ -90,7 +89,7 @@
       <h2 style="padding: 5px 15px;margin-top: 5px">优秀教师</h2>
       <ul>
         <li v-for="item in teacherList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-          <router-link :to="{ name:item.url, query:{Id:item.Id}}">
+          <router-link :to="{ path:item.url, query:{Id:item.Id}}">
             <span><img :src="item.imgSrc" /></span>
             <p style="text-align: center; font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
             <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
@@ -103,10 +102,11 @@
 </template>
 
 <script>
-  import { reformat } from '../common/reformartDate'
+/*  import { reformat } from '../common/reformartDate'*/
 
 export default {
   name: 'Home',
+  inject: ['reload'],
   props: {
     initialSpeed: {
       type: Number,
@@ -120,7 +120,9 @@ export default {
   data () {
     return {
       msg: '通知与展示',
+      title:'新增通知',
       role:'',
+      not:false,
       projectList :[
         {'Id':'1',  'url':'lab-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
         {'Id':'2',  'url':'que-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
@@ -135,60 +137,7 @@ export default {
         {'Id':'4',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
         {'Id':'5',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'}
       ],
-      tableData1: [{
-        inform:'这是一条最新通知这是一条最新通知这是一条最新通知',
-        url:'http://www.baidu.com/',
-        unit:'物理与电信工程学院通信7班',
-        uptime: '2019-03-02',
-        deadline: '2019-05-01'
-      },
-        {
-          inform:'这是一条最新通知',
-          url:'#showmsg',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },
-        {
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },
-        {
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },
-        {
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },{
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },{
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },
-        {
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        },
-        {
-          inform:'这是一条最新通知',
-          unit:'物理与电信工程学院',
-          uptime: '2019-03-02',
-          deadline: '2019-05-01'
-        }],
+      tableData1: [],
       sliders:[
         {img:'../static/image/1.jpg'},
         {img:'../static/image/2.jpg'},
@@ -206,13 +155,6 @@ export default {
       speed: this.initialSpeed
     }
   },
-  created:function(){
-    this.getParams();
-  },
-  watch: {
-    // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
-    '$route': 'getParams'
-  },
   computed:{
     containerStyle() {
       return {
@@ -221,45 +163,95 @@ export default {
     },
     interval() {
       return this.initialInterval * 1000
+    },
+    reversetableData1() {
+      return this.tableData1.reverse();
     }
   },
   mounted() {
-    this.init()
+    const userrole = JSON.parse(sessionStorage.getItem('用户角色'));
+    this.role = userrole;
+
+    var vm = this;
+    this.$axios({
+      method: 'get',
+      url: 'http://192.168.1.235:8080/exper_front/inform/list'
+    }).then(response => {
+      if(response.data === ''){
+      this.$router.push({path: '/Login'})
+    }else{
+      vm.tableData1 = response.data.data;
+      let tableData1 = response.data.data[0];
+      console.log(tableData1)
+    }
+  }).catch(function (err) {
+      console.log(err);
+    })
   },
   methods:{
     add() {
       this.form = {
-        inform: '',
-        unit:'',
-        uptime: '',
-        deadline: '',
-        main: ''
+        title: '',
+        author:'',
+        detail: ''
       };
       this.dialogFormVisible = true;
     },
+    handleDelete(index, row) {
+      var vm = this;
+      this.$axios({
+        method: 'get',
+        url: 'http://192.168.1.235:8080/exper_front/inform/delete/'+this.reversetableData1[index].id,
+      }).then(response => {
+        if(response.data === ''){
+        this.$router.push({path: '/Login'})
+      }else{
+        this.reload()
+        console.log(response);
+        this.$notify({
+          type: 'success',
+          message: response.data.meta.message,
+          duration: 1000
+        })
+      }
+    }).catch(function (err) {
+        console.log(err);
+      });
+    },
     upinform() {
-      this.form.date = reformat(this.form.date);
-      // this.tableData1.push(this.form);
-      this.tableData1.splice(0, 0,{
-        inform: this.form.inform,
-        unit:this.form.unit,
-        uptime: this.form.uptime,
-        deadline:this.form.deadline,
-        main:this.form.main,
-        url:'#showmsg'
+      var vm = this;
+      this.$axios({
+        method: 'post',
+        url: 'http://192.168.1.235:8080/exper_front/inform/add',
+        data:{
+          id:'',
+          publishData:'',
+          title: this.form.title,
+          author:this.form.author,
+          detail:this.form.detail
+        }
+      }).then(response => {
+        if(response.data === ''){
+        this.$router.push({path: '/Login'})
+      }else{
+        this.reload()
+        console.log(response);
+        this.$notify({
+          type: 'success',
+          message: response.data.meta.message,
+          duration: 1000
+        })
+      }
+    }).catch(function (err) {
+        console.log(err);
       });
       this.dialogFormVisible = false;
     },
     cancel(){
       this.dialogFormVisible = false;
     },
-    getParams:function(){
-      // 取到路由带过来的参数
-      var a = this.$route.query.role;
-      // 将数据放在当前组件的数据内
-/*      console.log("传来的参数=="+routerParams);*/
-      this.role = a;
-    },
+
+
     init() {
       this.play();
       window.onblur = function() { this.stop() }.bind(this);

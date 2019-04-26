@@ -1,7 +1,7 @@
 <template>
   <div class="Manager">
     <div class="wrapper">
-      <show @transferUser="getUser"></show>
+      <show ></show>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" router style=";box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
       <el-menu-item index="ManagerHome">首页</el-menu-item>
       <el-submenu index="2">
@@ -28,12 +28,15 @@
       </el-submenu>
       <el-submenu index="5">
         <template slot="title">信息查询与维护</template>
+        <el-submenu index="5-1">
+          <template slot="title">账号信息</template>
         <el-menu-item index="Managerpmessage">个人信息</el-menu-item>
         <el-menu-item index="Managerpassword">修改密码</el-menu-item>
+        </el-submenu>
         <el-menu-item index="deal-message">信息管理</el-menu-item>
+        <el-menu-item index="deal-talk">讨论管理</el-menu-item>
         <el-menu-item index="Managerscore">成绩管理</el-menu-item>
       </el-submenu>
-      <el-menu-item index="Managerstudy">学习探讨区</el-menu-item>
     </el-menu>
 
     <router-view/>
@@ -60,9 +63,6 @@
       };
     },
     methods: {
-      getUser (msg) {
-        this.username = msg;
-      },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       }

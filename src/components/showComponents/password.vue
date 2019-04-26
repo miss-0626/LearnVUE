@@ -1,6 +1,6 @@
 <template>
     <div style=";margin:100px 400px 0px 400px;padding: 40px 40px 15px 15px; border:1px solid #3299cc;border-radius: 4px;">
-      <el-form :model="user" status-icon :rules="rules" ref="user" label-width="100px">
+      <el-form :ref="user" :model="user" status-icon :rules="rules" ref="user" label-width="100px">
         <el-form-item class="labelColor" label="旧密码" prop="pass">
           <el-input v-model="user.pass" placeholder="请输入密码" :type="user.show.pass?'text':'password'" autocomplete="off">
             <i slot="suffix" class="el-input__icon el-icon-view" @click="user.show.pass=!user.show.pass"></i>
@@ -39,7 +39,6 @@
             }
           }
         }
-
         var validatePass2 = (rule, value, callback) =>{
           if (value === '') {
             callback(new Error('请再次输入密码'));
@@ -71,15 +70,39 @@
       },
       methods: {
         submitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              alert('submit!');
+              this.$axios({
+                method: 'post',
+                url: 'http://192.168.1.235:8080/exper_front/info/changepassword',
+                data:{
+                  oldPassword:this.user.pass,
+                  newPassword:this.user.newPass,
+                }
+              }).then(response=>{
+                if(response.data === ''){
+            this.$router.push({path: '/Login'})
+          }else{
+            let res = response.data;
+            console.log(res);
+            if (response.data.meta.success === true) {
+              this.$message({
+                type: 'success',
+                message: '密码修改成功，请重新登陆！',
+                showClose: true
+              })
+              this.$router.push({path: '/Login'});
             } else {
-              console.log('error submit!!');
-          return false;
-        }
-        });
+              this.$message({
+                type: 'error',
+                message: response.data.meta.message,
+                showClose: true
+              })
+            }
+          }
+            }).catch(function(err){
+            console.log(err)
+          });
         },
+
         resetForm(formName) {
           this.$refs[formName].resetFields();
         }

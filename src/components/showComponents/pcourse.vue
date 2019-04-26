@@ -1,21 +1,13 @@
 <template>
   <div style=";margin:30px 100px 0px 100px;">
     <el-table :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
-      <el-table-column prop="equiId" label="id" v-if="not" ></el-table-column>
-      <el-table-column prop="equiNum" label="设备编号" ></el-table-column>
-      <el-table-column prop="equiName" label="设备名称" ></el-table-column>
-<!--      <el-table-column prop="date" label="借用日期" ></el-table-column>
-      <el-table-column prop="time" label="借用时间" ></el-table-column>-->
-      <el-table-column prop="state" label="申请情况" width="100">
-        <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.state==='占用'" disable-transitions>{{scope.row.state}}</el-tag>
-          <el-tag type="danger" v-else="scope.row.state==='待审核'" disable-transitions>{{scope.row.state}}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column label="id" prop="courseId" v-if="not"></el-table-column>
+      <el-table-column prop="courseName" label="课程名称" ></el-table-column>
+      <el-table-column prop="lecturer" label="教学老师" ></el-table-column>
+      <el-table-column prop="courseType" label="课程类型" ></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" v-if="scope.row.state==='占用'" @click="handlereturn(scope.$index, scope.row)">归 还</el-button>
-          <el-button type="primary" v-if="scope.row.state==='待审核'" @click="handlereturn(scope.$index, scope.row)">取消申请</el-button>
+          <el-button type="danger"  @click="handledrop(scope.$index,scope.row)">退 选</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,7 +25,7 @@
 
 <script>
   export default {
-    name: "p-lab-que",
+    name: "pcourse",
     inject: ['reload'],
     data() {
       return {
@@ -47,7 +39,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/myequi',
+        url: 'http://192.168.1.235:8080/exper_front/info/mycourse',
         data:{}
       }).then(response => {
         let res = response.data
@@ -72,10 +64,10 @@
         this.currentPage = currentPage;
         console.log(this.currentPage);
       },
-      handlereturn(index,row) {
+      handledrop(index,row) {
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/back/' + this.tableData[index].equiId,
+          url: 'http://192.168.1.235:8080/exper_front/course/cancel/' + this.tableData[index].courseId,
         }).then(response => {
           this.$message({
           type: 'success',
