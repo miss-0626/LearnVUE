@@ -48,7 +48,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/detail',
+        url: 'http://47.101.137.101:8080/exper_front/info/detail',
         data:{}
       }).then(response => {
         let res = response.data

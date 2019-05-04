@@ -141,7 +141,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/list'
+          url: 'http://47.101.137.101:8080/exper_front/lab/list'
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -183,7 +183,7 @@
           }else{
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/lab/book/'+this.id
+            url: 'http://47.101.137.101:8080/exper_front/lab/book/'+this.id
           }).then(response=>{
             this.$message({
             type: 'success',
@@ -200,7 +200,7 @@
           this.id = row.labId;
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/lab/cancel/'+this.id
+            url: 'http://47.101.137.101:8080/exper_front/lab/cancel/'+this.id
           }).then(response=>{
             this.$message({
             type: 'success',

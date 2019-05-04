@@ -47,7 +47,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/myequi',
+        url: 'http://47.101.137.101:8080/exper_front/info/myequi',
         data:{}
       }).then(response => {
         let res = response.data
@@ -75,7 +75,7 @@
       handlereturn(index,row) {
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/back/' + this.tableData[index].equiId,
+          url: 'http://47.101.137.101:8080/exper_front/equi/back/' + this.tableData[index].equiId,
         }).then(response => {
           this.$message({
           type: 'success',

@@ -14,6 +14,7 @@
       <el-table-column prop="equiName" label="设备名称"></el-table-column>
       <el-table-column prop="state" label="状态"
                        :filters="[{ text: '占用', value: '占用' },
+                                  { text: '待审核', value: '待审核' },
                                   { text: '可预约', value: '可预约' }]"
                        :filter-method="filterTag" filter-placement="bottom-end">
         <template slot-scope="scope">
@@ -141,7 +142,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/equi/list'
+        url: 'http://47.101.137.101:8080/exper_front/equi/list'
       }).then(response => {
         if(response.data === ''){
         this.$router.push({path: '/Login'})
@@ -184,7 +185,7 @@
         }else{
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/book/'+ this.id
+          url: 'http://47.101.137.101:8080/exper_front/equi/book/'+ this.id
         }).then(response=>{
           this.$message({
           type: 'success',

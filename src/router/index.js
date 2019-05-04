@@ -47,7 +47,6 @@ import ptalk from '../components/showComponents/ptalk'
 import preply from '../components/showComponents/preply'
 import ptoreply from '../components/showComponents/p-to-reply'
 
-
 Vue.use(Router);
 
 export default new Router({
@@ -342,6 +341,11 @@ export default new Router({
           path:'/read-report',
           name:'read-report',
           component:readreport
+        },
+        {
+          path:'/Teacher-p-lab-que',
+          name:'Teacher-p-lab-que',
+          component:plabque
         },
         {
           path:'/Teacher-p-to-reply',

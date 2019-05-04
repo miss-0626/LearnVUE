@@ -58,7 +58,7 @@
         } else {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/equi/book/' + this.id
+            url: 'http://47.101.137.101:8080/exper_front/equi/book/' + this.id
           }).then(response => {
             this.$message({
             type: 'success',
@@ -77,7 +77,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/equi/detail/'+this.id
+        url: 'http://47.101.137.101:8080/exper_front/equi/detail/'+this.id
       }).then(response=>{
         if(response.data === ''){
         this.$router.push({path: '/Login'})

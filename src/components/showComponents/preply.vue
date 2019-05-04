@@ -10,7 +10,7 @@
       <div class="comment" v-for="(item,index) in  reversecomments" :index="item.index">
 
         <div class="info">
-          <div class="name">{{item.hammer}}
+          <div class="name">原评论
             <span  @click="handleget(item,index)">
               <el-button style="float: right;margin: 5px 15px" type="danger" size="mini" @click="handlerdelete">删 除</el-button>
             </span>
@@ -58,7 +58,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/myreply',
+        url: 'http://47.101.137.101:8080/exper_front/info/myreply',
         data:{}
       }).then(response => {
         let res = response.data
@@ -87,7 +87,7 @@
         }).then(() => {
           this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/comment/reply/delete/' + this.Id,
+          url: 'http://47.101.137.101:8080/exper_front/comment/reply/delete/' + this.Id,
         }).then(response => {
           this.$message({
           type: 'success',

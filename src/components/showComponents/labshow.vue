@@ -57,6 +57,7 @@
           currentPage:1,
           pagesize:10,
           search:'',
+          role:'',
           tableData2: []
         }
       },
@@ -68,7 +69,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/list'
+          url: 'http://47.101.137.101:8080/exper_front/lab/list'
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})

@@ -10,17 +10,17 @@
       <div class="comment" v-for="(item,index) in comments" :index="item.index">
 
         <div class="info">
-          <div class="name">我</div>
+          <div class="name">原评论</div>
         </div>
 
-        <div class="content">{{item.word}}</div>
+        <div class="content">{{item.content}}</div>
 
         <div class="reply">
           <div class="item">
 
             <div class="reply-content">
-              <span class="from-name">{{item.replier}}</span><span>回复:   </span>
-              <span>{{item.content}}</span>
+              <span class="from-name">{{item.replier}}</span><span>回复我:   </span>
+              <span>{{item.word}}</span>
             </div>
 
             <div class="reply-bottom">
@@ -47,7 +47,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/info/myhammer',
+        url: 'http://47.101.137.101:8080/exper_front/info/myhammer',
         data:{}
       }).then(response => {
         let res = response.data

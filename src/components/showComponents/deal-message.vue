@@ -75,7 +75,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/info/list'
+          url: 'http://47.101.137.101:8080/exper_front/info/list'
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -120,7 +120,7 @@
             var vm = this;
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/info/delete/'+this.userData[index].id,
+            url: 'http://47.101.137.101:8080/exper_front/info/delete/'+this.userData[index].id,
           }).then(response => {
             this.reload()
             this.$message({

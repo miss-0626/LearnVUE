@@ -39,7 +39,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/mycourse',
+        url: 'http://47.101.137.101:8080/exper_front/info/mycourse',
         data:{}
       }).then(response => {
         let res = response.data
@@ -67,7 +67,7 @@
       handledrop(index,row) {
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/course/cancel/' + this.tableData[index].courseId,
+          url: 'http://47.101.137.101:8080/exper_front/course/cancel/' + this.tableData[index].courseId,
         }).then(response => {
           this.$message({
           type: 'success',

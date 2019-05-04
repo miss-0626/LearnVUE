@@ -59,6 +59,7 @@
         return {
           currentPage:1,
           pagesize:5,
+          role:'',
           tableData9: []/*{
             img: '../static/image/tzl.png',
             name: '唐志列',
@@ -77,7 +78,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/list'
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/list'
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})

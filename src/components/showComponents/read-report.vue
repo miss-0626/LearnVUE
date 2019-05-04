@@ -40,7 +40,7 @@
         var vm = this;
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/info/mywork'
+          url: 'http://47.101.137.101:8080/exper_front/info/mywork'
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -65,7 +65,7 @@
         handledownload(index, row){
           this.$axios({
             method: 'post',
-            url: 'http://192.168.1.235:8080/exper_front/file/download',
+            url: 'http://47.101.137.101:8080/exper_front/file/download',
             data: {
               fileName:this.tableData[index].fileName,
               url:this.tableData[index].fileUrl,

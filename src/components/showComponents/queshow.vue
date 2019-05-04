@@ -68,6 +68,7 @@
       return {
         currentPage:1,
         pagesize:5,
+        role:'',
         tableData4: [],
         /*{
           img: '../static/image/示波器.jpg',
@@ -86,7 +87,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/equi/list'
+        url: 'http://47.101.137.101:8080/exper_front/equi/list'
       }).then(response => {
         if(response.data === ''){
         this.$router.push({path: '/Login'})

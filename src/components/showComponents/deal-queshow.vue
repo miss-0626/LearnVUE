@@ -61,7 +61,7 @@
           <el-upload
             ref="upload"
             name="file"
-            action="http://192.168.1.235:8080/exper_front/file/upload"
+            action="http://47.101.137.101:8080/exper_front/file/upload"
             list-type="picture-card"
             :limit="1"
             :file-list="imgList"
@@ -157,7 +157,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/equi/lista'
+        url: 'http://47.101.137.101:8080/exper_front/equi/lista'
       }).then(response => {
         if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -242,7 +242,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/name'
+          url: 'http://47.101.137.101:8080/exper_front/lab/name'
         }).then(response => {
           console.log(response)
           if(response.data === ''){
@@ -278,7 +278,7 @@
         var vm = this;
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/equi/add',
+          url: 'http://47.101.137.101:8080/exper_front/equi/add',
           data:{
             equiId: '',
             imgUrl: this.form.imgUrl,
@@ -308,7 +308,7 @@
       editdate() {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/equi/update',
+          url: 'http://47.101.137.101:8080/exper_front/equi/update',
           data: {
             imgUrl:this.form.imgUrl,
             equiId: this.form.equiId,
@@ -334,7 +334,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/name'
+          url: 'http://47.101.137.101:8080/exper_front/lab/name'
         }).then(response => {
           console.log(response)
           if(response.data === ''){
@@ -360,7 +360,7 @@
         this.dialogStatus = "editdate";
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/update/'+this.tableData18[index].equiId,
+          url: 'http://47.101.137.101:8080/exper_front/equi/update/'+this.tableData18[index].equiId,
         }).then(response => {
           vm.form = response.data.data;
           let res = response.data;
@@ -377,7 +377,7 @@
         }).then(() => {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/equi/delete/'+this.tableData18[index].equiId,
+            url: 'http://47.101.137.101:8080/exper_front/equi/delete/'+this.tableData18[index].equiId,
           }).then(response => {
             this.$message({
               type: 'success',

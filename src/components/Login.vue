@@ -262,7 +262,7 @@
          /* let data = {'userName':this.user.name,'password':this.user.pass,'role':this.user.role};*/
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/front/login',
+          url: 'http://47.101.137.101:8080/exper_front/front/login',
           data:{
             userName:this.user.name,
             password:this.user.pass,
@@ -346,7 +346,7 @@
         }else if(this.user.value==='student'){
           this.$axios({
             method: 'post',
-            url: 'http://192.168.1.235:8080/exper_front/front/register/stu',
+            url: 'http://47.101.137.101:8080/exper_front/front/register/stu',
             data:{
               id: 0,
                 userName: this.user.newName,
@@ -380,7 +380,7 @@
           else{
           this.$axios({
             method: 'post',
-            url: 'http://192.168.1.235:8080/exper_front/front/register/tea',
+            url: 'http://47.101.137.101:8080/exper_front/front/register/tea',
             data:{
                 userName: this.user.newName,
                 password: this.user.newPass,
@@ -435,7 +435,7 @@
     width: 100%;
     padding-bottom: 31%;
     height: 100%;
-    background: url('../assets/login.jpg') no-repeat center center fixed;
+    background: url('../../static/image/login.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #0C1424;
     -webkit-background-size: cover;

@@ -1,23 +1,53 @@
 <template>
+  <div class="header">
   <el-container>
-    <el-header style="text-align: right; font-size: 13px">
+<!--    <el-header style="text-align: right; font-size: 13px">
       <el-row :gutter="20">
-        <el-col :span="16"><div class="grid-content bg-purple">
-          <img src="../assets/logo_school.png">
-          <img src="../assets/word.png">
-        </div></el-col>
-        <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
+        <el-col :span="1">
+          <div class="picture"><img src="../assets/hslogo.jpg" style="width:95px;height:100px"></div>
+          &lt;!&ndash;<div class="picture"><img src="../assets/logo_school.png" style="width:350px;height:80px"></div>&ndash;&gt;
+        </el-col>
+          &lt;!&ndash;<img src="../static/image//word.png">&ndash;&gt;
+          <el-col :span="12">
+            <div class="title"><span style="font-size: 50px;font-family: 楷体;color: black;">综合实验教学管理平台</span></div>
+          </el-col>
+        <el-col :span="11"><div class="welcome">
         <span style="margin-right: 15px;font-weight:bold">欢迎 {{username}}</span>
         <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <i class="el-icon-setting" ></i>
           <el-dropdown-menu slot="dropdown">
-           <!-- <el-dropdown-item><el-label  @click="loginout">退出登录</el-label></el-dropdown-item>-->
+           &lt;!&ndash; <el-dropdown-item><el-label  @click="loginout">退出登录</el-label></el-dropdown-item>&ndash;&gt;
             <el-dropdown-item @click.native="loginout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        </div>
+        </el-col>
+      </el-row>
+    </el-header>-->
+    <el-header style="text-align: right; font-size: 13px">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div class="picture"><img src="../../static/image/logo_school.png"></div>
+        </el-col>
+        <!--<img src="../assets/word.png">-->
+        <el-col :span="12">
+          <div class="title"><span style="font-size: 50px;font-family: 楷体;color: white;">综合实验教学管理平台</span></div>
+        </el-col>
+        <el-col :span="8"><div class="welcome" style="margin-bottom: 5px">
+          <span style="margin-right: 15px;font-weight:bold">欢迎 {{username}}</span>
+          <el-dropdown>
+            <i class="el-icon-setting" ></i>
+            <el-dropdown-menu slot="dropdown">
+              <!-- <el-dropdown-item><el-label  @click="loginout">退出登录</el-label></el-dropdown-item>-->
+              <el-dropdown-item @click.native="loginout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        </el-col>
       </el-row>
     </el-header>
   </el-container>
+  </div>
 </template>
 
 <script>
@@ -51,7 +81,7 @@
           }).then(() => {
             this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/front/logout'
+            url: 'http://47.101.137.101:8080/exper_front/front/logout'
           }).then(response => {
             if(response.data.meta.success === true){
             this.$router.push({path: '/Login'});
@@ -72,9 +102,25 @@
 </script>
 
 <style scoped>
+  .header{
+    height: 105px;
+    color: #333;
+    /*background-color: #ffffff;*/
+    background-color: #2D8AB8;
+  }
   .el-header {
     background-color: #2D8AB8;
+    /*background-color: #ffffff;*/
     color: #333;
-    line-height: 60px;
+    line-height: 65px;
+  }
+  .picture{
+    margin:18px;
+  }
+  .title{
+    margin:20px;
+  }
+  .welcome{
+    margin:50px 15px;
   }
 </style>

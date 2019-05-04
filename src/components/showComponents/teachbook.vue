@@ -30,8 +30,9 @@
     name: "teachbook",
     data() {
       return {
-        currentPage:1,
-        pagesize:5,
+        currentPage: 1,
+        pagesize: 5,
+        role:'',
         tableData10: [{
           experiment: '现代通信网',
           book: '实验指导书'
@@ -39,18 +40,18 @@
           {
             experiment: '现代通信网',
             book: '实验指导书'
-          },{
+          }, {
             experiment: '现代通信网',
             book: '实验指导书'
-          }],
+          }]
+      }
+    },
    mounted() {
           const userrole = JSON.parse(sessionStorage.getItem('用户角色'));
           this.role = userrole;
-
-          console.log(role);
         },
   methods: {
-       upload:{
+       upload(){
 
        },
        download(index, row){
@@ -65,8 +66,6 @@
             console.log(this.currentPage);
           }
         }
-      }
-    }
   }
 </script>
 

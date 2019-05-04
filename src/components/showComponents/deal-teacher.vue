@@ -16,7 +16,7 @@
       <el-table-column label="id" prop="lecturerId" v-if="not"></el-table-column>
       <el-table-column label="姓名" prop="lecturerName"></el-table-column>
       <el-table-column label="职称" prop="title"></el-table-column>
-      <el-table-column label="简介" prop="introduce"></el-table-column>
+      <el-table-column label="简介" prop="introduce" v-if="not"></el-table-column>
       <el-table-column label="电话" prop="phone"></el-table-column>
       <el-table-column label="邮箱" prop="email"></el-table-column>
       <el-table-column label="操作">
@@ -46,7 +46,7 @@
         <el-upload
                ref="upload"
                name="file"
-               action="http://192.168.1.235:8080/exper_front/file/upload"
+               action="http://47.101.137.101:8080/exper_front/file/upload"
                list-type="picture-card"
                :limit="1"
                :file-list="imgList"
@@ -123,7 +123,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/lecturer/list'
+        url: 'http://47.101.137.101:8080/exper_front/lecturer/list'
       }).then(response => {
         if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -215,7 +215,7 @@
       update() {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/add',
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/add',
           data: {
             lecturerName: this.form.lecturerName,
             introduce: this.form.introduce,
@@ -236,7 +236,7 @@
       editdate(){
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/update',
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/update',
           data: {
             lecturerId:this.form.lecturerId,
             lecturerName: this.form.lecturerName,
@@ -271,7 +271,7 @@
         this.dialogStatus = "editdate";
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/update/'+this.tableData24[index].lecturerId,
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/update/'+this.tableData24[index].lecturerId,
         }).then(response => {
           vm.form = response.data.data;
           let res = response.data;
@@ -288,7 +288,7 @@
         }).then(() => {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/lecturer/delete/'+this.tableData24[index].lecturerId,
+            url: 'http://47.101.137.101:8080/exper_front/lecturer/delete/'+this.tableData24[index].lecturerId,
           }).then(response => {
             this.$message({
               type: 'success',

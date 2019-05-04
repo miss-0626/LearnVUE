@@ -12,7 +12,10 @@
         <p><a>占用状态</a>      {{isUsed}} </p>
         <p><a>实验室负责人</a>      {{lecturer}} </p>
       </div>
-      <p style="text-align: center;"><el-button type="primary" @click="handleuse">借用</el-button></p>
+      <p style="text-align: center;"><el-button v-show="this.isUsed === '空闲'" type="primary" @click="handleuse">借用</el-button>
+                     <el-button v-show="this.isUsed === '占用'" disabled type="danger" >占用中</el-button>
+      </p>
+
     </div>
       <p> <hr size="2px"/> </p>
       <div class="table" style="margin: 20px 250px">
@@ -70,7 +73,7 @@
           this.id = routerParams
         },
         handleuse() {
-          if (row.isUsed === '占用') {
+          if (this.isUsed === '占用') {
             this.$message({
               type: 'error',
               message: '该实验室已被占用！',
@@ -79,7 +82,7 @@
           } else {
             this.$axios({
               method: 'get',
-              url: 'http://192.168.1.235:8080/exper_front/lab/book/' + this.id
+              url: 'http://47.101.137.101:8080/exper_front/lab/book/' + this.id
             }).then(response => {
               this.$message({
               type: 'success',
@@ -98,7 +101,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/detail/'+this.id
+          url: 'http://47.101.137.101:8080/exper_front/lab/detail/'+this.id
         }).then(response=>{
           if(response.data === ''){
           this.$router.push({path: '/Login'})

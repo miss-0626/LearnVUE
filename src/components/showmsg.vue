@@ -1,7 +1,7 @@
 <template>
     <div class="background">
       <el-row :span="24" class="background">
-      <div class="inform" style="border-style:inset; background-color: white; margin:100px 180px 0px 180px; border-radius: 4px;">
+      <div class="inform" style="border-style:inset; background-color: white; margin:100px 180px; border-radius: 4px;">
         <p style="text-align: center;color: royalblue;font-size: xx-large"> {{title}} </p>
         <p> <hr size="5px"/> </p>
         <p style="font-size: x-large;white-space:pre-wrap;margin: 0 35px;"> {{detail}} </p>
@@ -23,7 +23,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/inform/detail/'+this.id
+          url: 'http://47.101.137.101:8080/exper_front/inform/detail/'+this.id
         }).then(response => {
           if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -56,13 +56,16 @@
 <style scoped>
   .background{
     width: 100%;
-    padding-bottom: 10%;
+    padding-bottom:20%;
     height: 100%;
-    background: url('../assets/background.jpg') no-repeat center center fixed;
+    background: url('../../static/image/background.jpg') no-repeat center center fixed;
     background-size: cover;
     background-color: #0C1424;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
+  }
+  .inform{
+    min-height: 500px;
   }
 </style>

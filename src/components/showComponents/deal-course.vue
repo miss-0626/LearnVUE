@@ -111,7 +111,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/course/list'
+        url: 'http://47.101.137.101:8080/exper_front/course/list'
       }).then(response => {
         if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -144,7 +144,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/name'
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/name'
         }).then(response => {
           console.log(response.data)
           if(response.data === ''){
@@ -180,7 +180,7 @@
       update() {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/course/add',
+          url: 'http://47.101.137.101:8080/exper_front/course/add',
           data: {
             courseId:'',
             courseName: this.form.courseName,
@@ -203,7 +203,7 @@
       editdate() {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/course/update',
+          url: 'http://47.101.137.101:8080/exper_front/course/update',
           data: {
               courseId: this.form.courseId,
               courseName: this.form.courseName,
@@ -230,7 +230,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/name'
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/name'
         }).then(response => {
           console.log(response.data)
           if(response.data === ''){
@@ -256,7 +256,7 @@
         this.form.courseId = this.tableData22[index].courseId;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/course/update/'+this.tableData22[index].courseId,
+          url: 'http://47.101.137.101:8080/exper_front/course/update/'+this.tableData22[index].courseId,
         }).then(response => {
           vm.form = response.data.data;
           let res = response.data;
@@ -273,7 +273,7 @@
         }).then(() => {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/course/delete/'+this.tableData22[index].courseId,
+            url: 'http://47.101.137.101:8080/exper_front/course/delete/'+this.tableData22[index].courseId,
           }).then(response => {
             this.reload()
             this.$message({

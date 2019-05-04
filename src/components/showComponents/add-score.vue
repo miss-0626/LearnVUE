@@ -180,13 +180,13 @@
         },
       }
     },
-    watch: {
+/*    watch: {
       dialogFormVisible: function(val, oldVal) {
         setTimeout(() => {
           this.getTableData13();
         }, 100);
       },
-    },
+    },*/
     methods: {
       clearFilter() {
         this.$refs.filterTable.clearFilter();

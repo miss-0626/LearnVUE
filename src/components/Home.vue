@@ -43,7 +43,7 @@
           </el-table-column>
           <el-table-column prop="author" label="发布单位" width="150" :show-overflow-tooltip="true"></el-table-column>
           <el-table-column prop="publishDate" label="发布时间" width="110" :show-overflow-tooltip="true"></el-table-column>
-          <el-table-column label="操作" width="80">
+          <el-table-column label="操作" width="80"  v-if="role === 3">
             <template slot-scope="scope">
               <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -72,21 +72,21 @@
       </el-main>
     </el-container>
 
-    <div class="projects" >
-      <h2 style="padding: 5px 15px;margin-top: 5px">最新推荐</h2>
+    <div class="teachers" v-if="role === 1" >
+      <h2 style="padding: 5px 15px;margin-top: 5px">推荐列表</h2>
       <ul>
-        <li v-for="item in projectList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-          <router-link :to="{ path:item.url, query:{Id:item.Id}}">
-          <span><img :src="item.imgSrc" /></span>
-          <p style="font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
-          <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
+        <li v-for="item in teacherList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+          <router-link :to="{ path:item.Url, query:{Id:item.Id}}">
+            <span><img :src="item.imgSrc" /></span>
+            <p style="text-align: center; font-size: large; color:#000000; padding-bottom: 2px"> {{item.Msg}}</p>
+            <p style="font-size: medium; color:#777777; padding-bottom: 5px"> {{item.msg}}</p>
           </router-link>
         </li>
       </ul>
     </div>
 
-    <div class="teachers" >
-      <h2 style="padding: 5px 15px;margin-top: 5px">优秀教师</h2>
+    <div class="teachers" v-if="role === 2">
+      <h2 style="padding: 5px 15px;margin-top: 5px">推荐列表</h2>
       <ul>
         <li v-for="item in teacherList" style="border:1px;border-radius:4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
           <router-link :to="{ path:item.url, query:{Id:item.Id}}">
@@ -102,8 +102,6 @@
 </template>
 
 <script>
-/*  import { reformat } from '../common/reformartDate'*/
-
 export default {
   name: 'Home',
   inject: ['reload'],
@@ -123,19 +121,11 @@ export default {
       title:'新增通知',
       role:'',
       not:false,
-      projectList :[
-        {'Id':'1',  'url':'lab-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
-        {'Id':'2',  'url':'que-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
-        {'Id':'3',  'url':'course-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
-        {'Id':'4',  'url':'teacher-detail',  'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'},
-        {'Id':'5',  'url':'study',          'imgSrc':'../static/image/5.jpg',  'Msg':'嘿嘿',  'msg':'哈哈哈'}
-      ],
       teacherList :[
-        {'Id':'1',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
-        {'Id':'2',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
-        {'Id':'3',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
-        {'Id':'4',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'},
-        {'Id':'5',  'url':'teacher-detail',  'imgSrc':'../static/image/tzl.png',  'Msg':'唐志列',  'msg':'物理与电信工程学院院长，博士生导师'}
+        {'Id':'1',  'url':'Studentlabshow',      'Url':'Teacherlabshow',       'imgSrc':'../static/image/实验室.jpeg',  'Msg':'实验室',  'msg':''},
+        {'Id':'2',  'url':'Studentqueshow',      'Url':'Teacherqueshow',       'imgSrc':'../static/image/实验设备.png',  'Msg':'先进设备',  'msg':''},
+        {'Id':'3',  'url':'Studentteachcourse',  'Url':'Teacherteachcourse',   'imgSrc':'../static/image/课程.jpg',  'Msg':'热门课程',  'msg':''},
+        {'Id':'4',  'url':'Studentteachers',     'Url':'Teacherteachers',      'imgSrc':'../static/image/教师.png',  'Msg':'优秀导师',  'msg':''}
       ],
       tableData1: [],
       sliders:[
@@ -175,7 +165,7 @@ export default {
     var vm = this;
     this.$axios({
       method: 'get',
-      url: 'http://192.168.1.235:8080/exper_front/inform/list'
+      url: 'http://47.101.137.101:8080/exper_front/inform/list'
     }).then(response => {
       if(response.data === ''){
       this.$router.push({path: '/Login'})
@@ -201,7 +191,7 @@ export default {
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/inform/delete/'+this.reversetableData1[index].id,
+        url: 'http://47.101.137.101:8080/exper_front/inform/delete/'+this.reversetableData1[index].id,
       }).then(response => {
         if(response.data === ''){
         this.$router.push({path: '/Login'})
@@ -222,7 +212,7 @@ export default {
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/inform/add',
+        url: 'http://47.101.137.101:8080/exper_front/inform/add',
         data:{
           id:'',
           publishData:'',
@@ -403,7 +393,7 @@ img{
   float: left;
 }
 .teachers ul li,.projects ul li{
-  width:230px;
+  width:300px;
   height:auto;
   margin:10px;
   display: block;
@@ -411,13 +401,13 @@ img{
   overflow: hidden;
 }
 .teachers ul li span,.projects ul li span{
-   width:230px;
+   width:300px;
    height:auto;
    display: block;
    overflow: hidden;
  }
 .teachers ul li img,.projects ul li img{
-  width: 230px;
+  width: 300px;
   height: 200px;
   cursor: pointer;
   transition: all 0.8s;

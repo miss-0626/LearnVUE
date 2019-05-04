@@ -15,8 +15,8 @@
         </div>
         <p v-if="role === 2" style="text-align: center;">
           <el-button v-show="!choose" type="primary" @click="handlechoose">选课</el-button>
-          <el-button v-show="choose" disabled type="primary" @click="handlechoose">已选课</el-button>
-          <el-button v-show="!choose" disabled type="danger" @click="handledrop">退课</el-button>
+          <el-button v-show="choose" disabled type="primary" >已选课</el-button>
+          <el-button v-show="!choose" disabled type="danger" >退课</el-button>
           <el-button v-show="choose" type="danger" @click="handledrop">退课</el-button>
         </p>
       </div>
@@ -106,7 +106,7 @@
         remark:'',
         count:'',
         limit:'',
-
+        role:'',
         comments:[],
         replys:[],
         chosedIndex: -1,
@@ -134,7 +134,7 @@
       handlechoose() {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/course/choose/' + this.id
+            url: 'http://47.101.137.101:8080/exper_front/course/choose/' + this.id
           }).then(response => {
             this.$message({
             type: 'success',
@@ -150,7 +150,7 @@
       handledrop() {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/course/cancel/' + this.id
+            url: 'http://47.101.137.101:8080/exper_front/course/cancel/' + this.id
           }).then(response => {
             this.$message({
             type: 'success',
@@ -175,7 +175,7 @@
         console.log(commentId);
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/comment/reply/list/' + this.commentId
+          url: 'http://47.101.137.101:8080/exper_front/comment/reply/list/' + this.commentId
         }).then(response => {
           this.$message({
           type: 'success',
@@ -229,7 +229,7 @@
         }else{
           this.$axios({
             method: 'post',
-            url: 'http://192.168.1.235:8080/exper_front/comment/add',
+            url: 'http://47.101.137.101:8080/exper_front/comment/add',
             data:{
                 courseId: this.id,
                 word: this.inputComment
@@ -253,7 +253,7 @@
         }else{
           this.$axios({
             method: 'post',
-            url: 'http://192.168.1.235:8080/exper_front/comment/reply/add',
+            url: 'http://47.101.137.101:8080/exper_front/comment/reply/add',
             data:{
               commentId: this.showItemId,
               word: this.inputreply,
@@ -284,7 +284,7 @@
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/course/detail/'+this.id
+          url: 'http://47.101.137.101:8080/exper_front/course/detail/'+this.id
         }).then(response=>{
           if(response.data === ''){
         this.$router.push({path: '/Login'})

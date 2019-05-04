@@ -55,7 +55,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/equi/checkbooklist'
+        url: 'http://47.101.137.101:8080/exper_front/equi/checkbooklist'
       }).then(response => {
         if(response.data === ''){
         this.$router.push({path: '/Login'})
@@ -86,7 +86,7 @@
         }).then(() => {
           this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/checkbook/'+this.tableData20[index].equiId,
+          url: 'http://47.101.137.101:8080/exper_front/equi/checkbook/'+this.tableData20[index].equiId,
         }).then(response => {
           this.reload()
           this.$message({
@@ -114,7 +114,7 @@
         }).then(() => {
           this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/equi/refuse/'+this.tableData20[index].equiId,
+          url: 'http://47.101.137.101:8080/exper_front/equi/refuse/'+this.tableData20[index].equiId,
         }).then(response => {
           this.reload()
           this.$message({

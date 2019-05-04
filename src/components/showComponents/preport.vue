@@ -4,12 +4,13 @@
       <el-button type="primary" @click="add" style="float:right;margin-right:30px">上传实验报告</el-button>
     </el-row>
     <el-table :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
-      <el-table-column label="id" prop="fileId" v-if="not"></el-table-column>
+      <el-table-column label="id" prop="id" v-if="not"></el-table-column>
       <el-table-column label="url" prop="fileUrl" v-if="not"></el-table-column>
       <el-table-column label="文件名" prop="fileName"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="small" type="primary" @click="handledownload(scope.$index, scope.row)">下 载</el-button>
+          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删 除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -31,7 +32,7 @@
           <el-upload
             ref="upload"
             name="file"
-            action="http://192.168.1.235:8080/exper_front/file/upload"
+            action="http://47.101.137.101:8080/exper_front/file/upload"
             :limit="3"
             :file-list="fileList"
              v-model="form.fileUrl"
@@ -86,7 +87,7 @@
       var vm = this;
       this.$axios({
         method: 'post',
-        url: 'http://192.168.1.235:8080/exper_front/info/myfile'
+        url: 'http://47.101.137.101:8080/exper_front/info/myfile'
       }).then(response => {
         if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -118,6 +119,7 @@
           duration: 6000
         });
         if (res.meta.success) {
+          // this.form.fileUrl = res.data.url;
           this.form.fileId = res.data.fileId; //将返回的文件储存路径赋值picture字段
         }
       },
@@ -138,13 +140,11 @@
         }
         return isLt2M;
       },
-
-
       add() {
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/course/name'
+          url: 'http://47.101.137.101:8080/exper_front/course/name'
         }).then(response => {
           console.log(response.data)
           if(response.data === ''){
@@ -174,7 +174,7 @@
       upload() {
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/file/save',
+          url: 'http://47.101.137.101:8080/exper_front/file/save',
           data: {
             fileId:this.form.fileId,
             courseName:this.form.courseName,
@@ -196,7 +196,7 @@
       handledownload(index, row){
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/file/download',
+          url: 'http://47.101.137.101:8080/exper_front/file/download',
           data: {
             fileName:this.tableData[index].fileName,
             url:this.tableData[index].fileUrl,
@@ -225,6 +225,34 @@
           console.log(err)
         });
       },
+      handleDelete(index, row) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios({
+            method: 'get',
+            url: 'http://47.101.137.101:8080/exper_front/file/delete/'+this.tableData[index].id,
+          }).then(response => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            let res = response.data;
+            console.log(res)
+          }).catch(function (err) {
+            console.log(err)
+          });
+          this.dialogFormVisible = false;
+          this.reload()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
     }
   }
 </script>

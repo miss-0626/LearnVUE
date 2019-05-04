@@ -26,10 +26,8 @@
       <el-table-column prop="lecturer" label="实验室负责人"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-          </el-button>
+          <el-button size="small" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,8 +64,8 @@
             <el-option v-for="item in options" :key="item.isUsed" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验室负责人" :label-width="formLabelWidth">
-          <el-select v-model="form.lecturer" placeholder="请选择">
+        <el-form-item label="实验室负责人" :label-width="formLabelWidth" >
+          <el-select v-model="form.lecturer" placeholder="请选择" @visible-change="getname">
             <el-option v-for="item in selects" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
@@ -83,8 +81,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { reformat } from '../../common/reformartDate'
-
   export default {
     name: "deal-labshow",
     inject: ['reload'],
@@ -117,7 +113,7 @@
       var vm = this;
       this.$axios({
         method: 'get',
-        url: 'http://192.168.1.235:8080/exper_front/lab/list'
+        url: 'http://47.101.137.101:8080/exper_front/lab/list'
       }).then(response => {
         if(response.data === ''){
           this.$router.push({path: '/Login'})
@@ -145,11 +141,11 @@
         this.currentPage = currentPage;
         console.log(this.currentPage);
       },
-      add() {
+      getname(){
         var vm = this;
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lecturer/name'
+          url: 'http://47.101.137.101:8080/exper_front/lecturer/name'
         }).then(response => {
           console.log(response.data)
           if(response.data === ''){
@@ -170,6 +166,8 @@
         }).catch(function (err) {
           console.log(err);
         })
+      },
+      add() {
         this.dialogStatus = "update";
         this.form = {
           labId: '',
@@ -187,7 +185,7 @@
         var vm = this;
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/lab/add',
+          url: 'http://47.101.137.101:8080/exper_front/lab/add',
           data:{
             labId: '',
             labNum:this.form.labNum,
@@ -218,7 +216,7 @@
       editdate(){
         this.$axios({
           method: 'post',
-          url: 'http://192.168.1.235:8080/exper_front/lab/update',
+          url: 'http://47.101.137.101:8080/exper_front/lab/update',
           data: {
             labId: this.form.labId,
             labNum:this.form.labNum,
@@ -247,7 +245,7 @@
         this.dialogStatus = "editdate";
         this.$axios({
           method: 'get',
-          url: 'http://192.168.1.235:8080/exper_front/lab/update/'+this.tableData16[index].labId,
+          url: 'http://47.101.137.101:8080/exper_front/lab/update/'+this.tableData16[index].labId,
         }).then(response => {
           vm.form = response.data.data;
           let res = response.data;
@@ -264,7 +262,7 @@
         }).then(() => {
           this.$axios({
             method: 'get',
-            url: 'http://192.168.1.235:8080/exper_front/lab/delete/'+this.tableData16[index].labId,
+            url: 'http://47.101.137.101:8080/exper_front/lab/delete/'+this.tableData16[index].labId,
           }).then(response => {
             this.$message({
               type: 'success',
